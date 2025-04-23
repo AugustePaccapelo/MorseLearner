@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bdlfwj4cousro"]
+
+[ext_resource type="Script" path="res://Scripts/Managers/UIManager.cs" id="1_vokvb"]
+[ext_resource type="PackedScene" uid="uid://ce27r1lfuva4q" path="res://Scenes/UI/Menus/TitleCard.tscn" id="2_g5khm"]
+[ext_resource type="PackedScene" uid="uid://7bp4uudaf5yx" path="res://Scenes/UI/Menus/MainMenu.tscn" id="3_iwsjp"]
+
+[node name="UIManager" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vokvb")
+titleCardScene = ExtResource("2_g5khm")
+mainMenuScene = ExtResource("3_iwsjp")

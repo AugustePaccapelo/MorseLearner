@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://ce27r1lfuva4q"]
+
+[ext_resource type="Texture2D" uid="uid://c7ifgd44asih2" path="res://Assets/Textures/UI/Menus/logoIsart.png" id="1_hgh57"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/TitleCard.cs" id="1_uducm"]
+
+[node name="TitleCard" type="Control" node_paths=PackedStringArray("isartLogo")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uducm")
+isartLogo = NodePath("TextureRect")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.125911, 0.125911, 0.125911, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(250, 79)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 395.0
+offset_right = 1.0
+offset_bottom = -394.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_hgh57")
