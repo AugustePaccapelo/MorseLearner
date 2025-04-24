@@ -2,18 +2,18 @@ using Godot;
 
 // Author : Auguste Paccapelo
 
-namespace Com.IsartDigital.OBG.Managers
+namespace Com.IsartDigital.OBG.managers
 {
-	public partial class SignalsManager : Node
+	public partial class InputManager : Node2D
 	{
 		// ---------- VARIABLES ---------- \\
 
 		#region // ----- Singleton ----- \\
-		static private SignalsManager instance;
+		static private InputManager instance;
 
-		static public SignalsManager GetInstance()
+		static public InputManager GetInstance()
 		{
-			if (instance == null) instance = new SignalsManager();
+			if (instance == null) instance = new InputManager();
 			return instance;
 
 		}
@@ -24,15 +24,13 @@ namespace Com.IsartDigital.OBG.Managers
 		// ----- Nodes ----- \\
 
 		// ----- Others ----- \\
-		// Menus Buttons
-		[Signal] public delegate void GoToMainMenuEventHandler();
-		[Signal] public delegate void PlayButtonPressedEventHandler();
+		public bool canPlay = false;
 
 		// ---------- FUNCTIONS ---------- \\
 
 		// ----- Constructor & Ready & Process ----- \\
 
-		private SignalsManager() : base() { }
+		private InputManager() : base() { }
 
 		public override void _Ready()
 		{
@@ -40,7 +38,7 @@ namespace Com.IsartDigital.OBG.Managers
 			if (instance != null)
 			{
 				QueueFree();
-				GD.Print(nameof(SignalsManager) + " Instance already exist, destroying the last added.");
+				GD.Print(nameof(InputManager) + " Instance already exist, destroying the last added.");
 				return;
 			}
 
@@ -57,11 +55,19 @@ namespace Com.IsartDigital.OBG.Managers
 			base._Process(lDelta);
 		}
 
-		// ----- My Functions ----- \\
+        public override void _Input(InputEvent @event)
+        {
+            base._Input(@event);
 
-		// ----- Destructor ----- \\
+			// Touch managment
+			if (!canPlay) return;
+        }
 
-		protected override void Dispose(bool pDisposing)
+        // ----- My Functions ----- \\
+
+        // ----- Destructor ----- \\
+
+        protected override void Dispose(bool pDisposing)
 		{
 			#region Singleton Dispose
 			if (pDisposing && instance == this) instance = null;

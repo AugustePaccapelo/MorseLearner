@@ -1,5 +1,6 @@
 using Com.IsartDigital.OBG.Managers;
 using Com.IsartDigital.OBG.UI.Menus;
+using Com.IsartDigital.OBG.UI;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -25,6 +26,7 @@ namespace Com.IsartDigital.OBG.managers
         // ----- Paths ----- \\
         [Export] private PackedScene titleCardScene;
 		[Export] private PackedScene mainMenuScene;
+		[Export] private PackedScene hudScene;
 
 		// ----- Nodes ----- \\
 		private SignalsManager signalsManager;
@@ -60,6 +62,7 @@ namespace Com.IsartDigital.OBG.managers
 
 			signalsManager = SignalsManager.GetInstance();
 			signalsManager.GoToMainMenu += GoToMainMenu;
+			signalsManager.PlayButtonPressed += PlayPressed;
 
 			AddChild(titleCardScene.Instantiate());
 		}
@@ -79,6 +82,12 @@ namespace Com.IsartDigital.OBG.managers
 			AddChild(lMainMenu);
 		}
 
+		private void PlayPressed()
+		{
+			MainMenu.GetInstance().QueueFree();
+			AddChild(hudScene.Instantiate<HUD>());
+		}
+
 		// ----- Destructor ----- \\
 
 		protected override void Dispose(bool pDisposing)
@@ -88,6 +97,9 @@ namespace Com.IsartDigital.OBG.managers
             #endregion
 
             base.Dispose(pDisposing);
-		}
+
+            signalsManager.GoToMainMenu -= GoToMainMenu;
+			signalsManager.PlayButtonPressed -= PlayPressed;
+        }
 	}
 }

@@ -73,7 +73,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private void PlayFunction()
 		{
-			GD.Print("Play game");
+            SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.PlayButtonPressed);
 		}
 
 		private void QuitFunction()

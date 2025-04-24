@@ -18,13 +18,16 @@ namespace Com.IsartDigital.OBG.Managers
             return instance;
 
         }
-        #endregion
+		#endregion
 
 
-        // ----- Paths ----- \\
+		// ----- Paths ----- \\
+		[Export] private PackedScene inputManagerScene;
         [Export] private PackedScene uiManagerScene;
 
 		// ----- Nodes ----- \\
+		private SignalsManager signalsManager;
+		private InputManager inputManager;
 		private UIManager uiManager;
 
 		// ----- Others ----- \\
@@ -68,8 +71,17 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private void CreateAllManagers()
 		{
+			signalsManager = SignalsManager.GetInstance();
+			signalsManager.PlayButtonPressed += PlayPressed;
+			inputManager = inputManagerScene.Instantiate<InputManager>();
+			AddChild(inputManager);
 			uiManager = uiManagerScene.Instantiate<UIManager>();
 			AddChild(uiManager);
+		}
+
+		private void PlayPressed()
+		{
+			inputManager.canPlay = true;
 		}
 
 		// ----- Destructor ----- \\
@@ -81,6 +93,8 @@ namespace Com.IsartDigital.OBG.Managers
             #endregion
 
             base.Dispose(pDisposing);
+
+			signalsManager.PlayButtonPressed -= PlayPressed;
 		}
 	}
 }

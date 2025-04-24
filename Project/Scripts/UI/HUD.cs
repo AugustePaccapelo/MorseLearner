@@ -2,18 +2,18 @@ using Godot;
 
 // Author : Auguste Paccapelo
 
-namespace Com.IsartDigital.OBG.Managers
+namespace Com.IsartDigital.OBG.UI
 {
-	public partial class SignalsManager : Node
+	public partial class HUD : Control
 	{
 		// ---------- VARIABLES ---------- \\
 
 		#region // ----- Singleton ----- \\
-		static private SignalsManager instance;
+		static private HUD instance;
 
-		static public SignalsManager GetInstance()
+		static public HUD GetInstance()
 		{
-			if (instance == null) instance = new SignalsManager();
+			if (instance == null) instance = new HUD();
 			return instance;
 
 		}
@@ -24,15 +24,12 @@ namespace Com.IsartDigital.OBG.Managers
 		// ----- Nodes ----- \\
 
 		// ----- Others ----- \\
-		// Menus Buttons
-		[Signal] public delegate void GoToMainMenuEventHandler();
-		[Signal] public delegate void PlayButtonPressedEventHandler();
 
 		// ---------- FUNCTIONS ---------- \\
 
 		// ----- Constructor & Ready & Process ----- \\
 
-		private SignalsManager() : base() { }
+		private HUD() : base() { }
 
 		public override void _Ready()
 		{
@@ -40,7 +37,7 @@ namespace Com.IsartDigital.OBG.Managers
 			if (instance != null)
 			{
 				QueueFree();
-				GD.Print(nameof(SignalsManager) + " Instance already exist, destroying the last added.");
+				GD.Print(nameof(HUD) + " Instance already exist, destroying the last added.");
 				return;
 			}
 
