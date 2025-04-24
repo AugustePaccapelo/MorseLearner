@@ -23,10 +23,10 @@ namespace Com.IsartDigital.OBG.UI.Menus
         // ----- Paths ----- \\
 
         // ----- Nodes ----- \\
-        [Export] private Button buttonPlay;
-        [Export] private Button buttonSettings;
-        [Export] private Button buttonCredits;
-        [Export] private Button buttonQuit;
+        [Export] private Button PlayButton;
+        [Export] private Button quitButton;
+		[Export] private Button soundOnButton;
+		[Export] private Button soundOffButton;
 
         // ----- Others ----- \\
 
@@ -49,7 +49,6 @@ namespace Com.IsartDigital.OBG.UI.Menus
             instance = this;
             #endregion
 
-
             base._Ready();
 
 			SetButtons();
@@ -66,10 +65,10 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private void SetButtons()
 		{
-            buttonPlay.Pressed += PlayFunction;
-			buttonSettings.Pressed += SettingsFunction;
-			buttonCredits.Pressed += CreditsFunction;
-			buttonQuit.Pressed += QuitFunction;
+            PlayButton.Pressed += PlayFunction;
+			quitButton.Pressed += QuitFunction;
+            soundOnButton.Pressed += TurnSoundOn;
+            soundOffButton.Pressed += TurnSoundOff;
 		}
 
 		private void PlayFunction()
@@ -77,24 +76,28 @@ namespace Com.IsartDigital.OBG.UI.Menus
 			GD.Print("Play game");
 		}
 
-		private void SettingsFunction()
-		{
-			GD.Print("Go to settings");
-		}
-
-		private void CreditsFunction()
-		{
-			GD.Print("Go to credits");
-		}
-
 		private void QuitFunction()
 		{
 			GetTree().Quit();
 		}
 
-		// ----- Destructor ----- \\
+		private void TurnSoundOn()
+        {
+            GD.Print("Sound On");
+            soundOffButton.Show();
+            soundOnButton.Hide();
+        }
 
-		protected override void Dispose(bool pDisposing)
+        private void TurnSoundOff()
+        {
+            GD.Print("Sound Off");
+            soundOffButton.Hide();
+            soundOnButton.Show();
+        }
+
+        // ----- Destructor ----- \\
+
+        protected override void Dispose(bool pDisposing)
 		{
             #region Singleton Dispose
             if (pDisposing && instance == this) instance = null;
