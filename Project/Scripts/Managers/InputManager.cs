@@ -79,6 +79,18 @@ namespace Com.IsartDigital.OBG.managers
                 }
             }
 
+			if (pEvent is InputEventScreenDrag lEventDrag)
+			{
+				if (lEventDrag.IsReleased())
+				{
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
+                }
+				else
+				{
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
+                }
+			}
+
 			// Input for mouse
 			if (pEvent is InputEventMouseButton lEventMouse)
 			{
