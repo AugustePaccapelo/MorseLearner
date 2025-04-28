@@ -1,3 +1,5 @@
+using Com.IsartDigital.OBG.UI;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -23,6 +25,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- Nodes ----- \\
 		private SignalsManager signalsManager;
+		public HUD hud;
 
 		// ----- Others ----- \\
 		private float unitTime = 0.2f;
@@ -97,20 +100,30 @@ namespace Com.IsartDigital.OBG.Managers
 			DetectInput();
         }
 
+		private void NewDot()
+		{
+			hud.UpdateMorse(MorseCode.DOT_CHARAC);
+		}
+
+		private void NewDash()
+		{
+            hud.UpdateMorse(MorseCode.DASH_CHARAC);
+        }
+
 		private void NewLittleSpace()
 		{
-			GD.Print("Little space");
-		}
+            hud.UpdateMorse(MorseCode.LITTLE_SPACE_CHARAC);
+        }
 
 		private void NewLetter()
 		{
-			GD.Print("New Letter");
-		}
+            hud.UpdateMorse(MorseCode.LETTER_SPACE_CHARAC);
+        }
 
 		private void NewWord()
 		{
-			GD.Print("New Word");
-		}
+            hud.UpdateMorse(MorseCode.WORD_SPACE_CHARAC);
+        }
 
 		private void DetectInput()
 		{
@@ -120,12 +133,13 @@ namespace Com.IsartDigital.OBG.Managers
             // Click
             if (currentHoldingTime <= DOT_UNIT * unitTime + timeErrorMargin)
 			{
-				GD.Print(".");
-				return;
+				NewDot();
+
+                return;
 			}
 			if (currentHoldingTime <= DASH_UNIT * unitTime + timeErrorMargin)
 			{
-				GD.Print("-");
+				NewDash();
 				return;
 			}
 		}
@@ -140,16 +154,16 @@ namespace Com.IsartDigital.OBG.Managers
 
 			else if (currentSpacingTime <= LETTERS_SPACE_UNIT * unitTime - timeErrorMargin)
 			{
-				GD.Print("Little Space");
+				NewLittleSpace();
 			}
 
 			else if (currentSpacingTime <= WORDS_SPACE_UNIT * unitTime - timeErrorMargin)
 			{
-				GD.Print("Letter Space");
+				NewLetter();
 			}
 			else if (currentSpacingTime <= WORDS_SPACE_UNIT * unitTime + timeErrorMargin)
 			{
-				GD.Print("Word Space");
+				NewWord();
 			}
 			
 			currentSpacingTime = 0f;

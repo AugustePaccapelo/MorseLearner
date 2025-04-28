@@ -1,3 +1,4 @@
+using Com.IsartDigital.OBG.Managers;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -22,8 +23,10 @@ namespace Com.IsartDigital.OBG.UI
 		// ----- Paths ----- \\
 
 		// ----- Nodes ----- \\
+		[Export] private Label morseLabel;
 
 		// ----- Others ----- \\
+		private string morseLabelText = "";
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -45,6 +48,8 @@ namespace Com.IsartDigital.OBG.UI
 			#endregion
 
 			base._Ready();
+
+			LevelManager.GetInstance().hud = this;
 		}
 
 		public override void _Process(double pDelta)
@@ -55,6 +60,12 @@ namespace Com.IsartDigital.OBG.UI
 		}
 
 		// ----- My Functions ----- \\
+
+		public void UpdateMorse(string pNewCharac)
+		{
+			morseLabelText += pNewCharac;
+			morseLabel.Text = morseLabelText;
+		}
 
 		// ----- Destructor ----- \\
 

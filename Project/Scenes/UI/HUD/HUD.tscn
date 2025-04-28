@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://f4yxolbl45o3"]
+[gd_scene load_steps=3 format=3 uid="uid://f4yxolbl45o3"]
 
 [ext_resource type="Script" path="res://Scripts/UI/HUD.cs" id="1_pa478"]
 
-[node name="HUD" type="Control"]
+[sub_resource type="LabelSettings" id="LabelSettings_ur7ro"]
+font_size = 32
+
+[node name="HUD" type="Control" node_paths=PackedStringArray("morseLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +14,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_pa478")
+morseLabel = NodePath("Label2")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -25,3 +29,17 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "In Game"
 metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 74.0
+offset_top = 354.0
+offset_right = -338.0
+offset_bottom = -561.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "MORSE :"
+label_settings = SubResource("LabelSettings_ur7ro")

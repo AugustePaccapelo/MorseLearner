@@ -69,8 +69,15 @@ namespace Com.IsartDigital.OBG.managers
 			// Input for screen
 			if (pEvent is InputEventScreenTouch lEventTouch)
 			{
-
-			}
+				if (lEventTouch.IsReleased())
+				{
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
+                }
+                else
+                {
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
+                }
+            }
 
 			// Input for mouse
 			if (pEvent is InputEventMouseButton lEventMouse)
