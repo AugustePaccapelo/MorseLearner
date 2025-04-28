@@ -1,3 +1,4 @@
+using Com.IsartDigital.OBG.Managers;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -22,6 +23,7 @@ namespace Com.IsartDigital.OBG.managers
 		// ----- Paths ----- \\
 
 		// ----- Nodes ----- \\
+		private SignalsManager signalsManager;
 
 		// ----- Others ----- \\
 		public bool canPlay = false;
@@ -46,6 +48,8 @@ namespace Com.IsartDigital.OBG.managers
 			#endregion
 
 			base._Ready();
+
+			signalsManager = SignalsManager.GetInstance();
 		}
 
 		public override void _Process(double pDelta)
@@ -55,12 +59,31 @@ namespace Com.IsartDigital.OBG.managers
 			base._Process(lDelta);
 		}
 
-        public override void _Input(InputEvent @event)
+        public override void _Input(InputEvent pEvent)
         {
-            base._Input(@event);
+            base._Input(pEvent);
 
 			// Touch managment
 			if (!canPlay) return;
+
+			// Input for screen
+			if (pEvent is InputEventScreenTouch lEventTouch)
+			{
+
+			}
+
+			// Input for mouse
+			if (pEvent is InputEventMouseButton lEventMouse)
+			{
+				if (lEventMouse.IsReleased())
+				{
+					signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
+                }
+				else
+				{
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
+                }
+			}
         }
 
         // ----- My Functions ----- \\

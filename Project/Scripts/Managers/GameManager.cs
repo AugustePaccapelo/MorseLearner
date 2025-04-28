@@ -23,11 +23,13 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- Paths ----- \\
 		[Export] private PackedScene inputManagerScene;
+		[Export] private PackedScene levelManagerScene;
         [Export] private PackedScene uiManagerScene;
 
 		// ----- Nodes ----- \\
 		private SignalsManager signalsManager;
 		private InputManager inputManager;
+		private LevelManager levelManager;
 		private UIManager uiManager;
 
 		// ----- Others ----- \\
@@ -73,10 +75,15 @@ namespace Com.IsartDigital.OBG.Managers
 		{
 			signalsManager = SignalsManager.GetInstance();
 			signalsManager.PlayButtonPressed += PlayPressed;
+
 			inputManager = inputManagerScene.Instantiate<InputManager>();
 			AddChild(inputManager);
+
 			uiManager = uiManagerScene.Instantiate<UIManager>();
 			AddChild(uiManager);
+
+			levelManager = levelManagerScene.Instantiate<LevelManager>();
+			AddChild(levelManager);
 		}
 
 		private void PlayPressed()

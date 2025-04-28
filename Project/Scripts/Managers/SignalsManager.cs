@@ -28,6 +28,10 @@ namespace Com.IsartDigital.OBG.Managers
 		[Signal] public delegate void GoToMainMenuEventHandler();
 		[Signal] public delegate void PlayButtonPressedEventHandler();
 
+		// Inputs Signals
+		[Signal] public delegate void InputPressedEventHandler();
+		[Signal] public delegate void InputReleasedEventHandler();
+
 		// ---------- FUNCTIONS ---------- \\
 
 		// ----- Constructor & Ready & Process ----- \\
