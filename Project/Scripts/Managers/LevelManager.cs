@@ -1,3 +1,4 @@
+using System.Linq;
 using Com.IsartDigital.OBG.UI;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
@@ -28,19 +29,29 @@ namespace Com.IsartDigital.OBG.Managers
 		public HUD hud;
 
 		// ----- Others ----- \\
-		private float unitTime = 0.2f;
+
+		private RandomNumberGenerator rand = new RandomNumberGenerator();
+
+		private float unitTime = 0.15f;
 		private const int DOT_UNIT = 1;
-        private const int DASH_UNIT = 3;
-        private const int LITTLE_SPACE_UNIT = 1;
+		private const int DASH_UNIT = 3;
+		private const int LITTLE_SPACE_UNIT = 1;
 		private const int LETTERS_SPACE_UNIT = 3;
 		private const int WORDS_SPACE_UNIT = 5;
-		private float timeErrorMargin = 0.05f;
+		private float timeErrorMargin = 0.1f;
 		private bool inputPressed = false;
 		private bool inputReleased = false;
 		private float currentHoldingTime;
 		private float currentSpacingTime;
+		private bool isFirstCharacter = true;
+
+		private string[] allLetters;
 
 		public bool letterSequence = true;
+		private string currentLetter;
+		private string currentLetterMorseCode;
+		private string currentMorseCode;
+		private bool wasWrong = false;
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -63,9 +74,14 @@ namespace Com.IsartDigital.OBG.Managers
 
 			base._Ready();
 
+			rand.Randomize();
+
 			signalsManager = SignalsManager.GetInstance();
 			signalsManager.InputPressed += InputSignalPressed;
 			signalsManager.InputReleased += InputSignalReleased;
+			signalsManager.PlayButtonPressed += StartGame;
+
+			allLetters = MorseCode.alphabet.Keys.ToArray();
 		}
 
 		public override void _Process(double pDelta)
@@ -86,13 +102,63 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- My Functions ----- \\
 
+		private void StartGame()
+		{
+			GetRandomLetter();
+		}
+
+		private void GetRandomLetter()
+		{
+			int lLength = allLetters.Length;
+			int lIndex = rand.RandiRange(0, lLength - 1);
+			string lCurrentLetter = allLetters[lIndex];
+			string lCurrentMorseCode = MorseCode.alphabet[lCurrentLetter];
+			currentLetter = lCurrentLetter;
+			currentLetterMorseCode = lCurrentMorseCode;
+			currentMorseCode = "";
+			hud.UpdateLetter(currentLetter);
+			hud.UpdateMorse(currentMorseCode);
+		}
+
+		private bool IsCurrentCodeCorrect()
+		{
+            return currentMorseCode == currentLetterMorseCode.Substring(0, currentMorseCode.Length);
+		}
+
+		private bool VerifyCurrentMorse()
+		{
+			if (!IsCurrentCodeCorrect())
+			{
+                wasWrong = true;
+                hud.UpdateConfirmation(false);
+                currentMorseCode = "";
+                hud.UpdateMorse(currentMorseCode);
+            }
+			else if (wasWrong)
+			{
+                wasWrong = false;
+                hud.UpdateConfirmation(true);
+                return true;
+            }
+
+			return false;
+        }
+
+		private bool IsCodeFinished()
+		{
+			return currentMorseCode.Length == currentLetterMorseCode.Length && IsCurrentCodeCorrect();
+		}
+
 		private void InputSignalPressed()
 		{
 			inputPressed = true;
 			inputReleased = false;
 			currentHoldingTime = 0f;
 			
-            DetectSpace();
+			if (!isFirstCharacter)
+			{
+                DetectSpace();
+            }
         }
 
 		private void InputSignalReleased()
@@ -100,31 +166,41 @@ namespace Com.IsartDigital.OBG.Managers
             inputPressed = false;
 			inputReleased = true;
 			DetectInput();
+            hud.UpdateMorse(currentMorseCode);
+			if (!VerifyCurrentMorse())
+			{
+				isFirstCharacter = true;
+			}
+			if (IsCodeFinished())
+			{
+				GD.Print("GG !");
+				GetRandomLetter();
+			}
         }
 
 		private void NewDot()
 		{
-			hud.UpdateMorse(MorseCode.DOT_CHARAC);
+			currentMorseCode += MorseCode.DOT_CHARAC;
 		}
 
 		private void NewDash()
 		{
-            hud.UpdateMorse(MorseCode.DASH_CHARAC);
+            currentMorseCode += MorseCode.DASH_CHARAC;
         }
 
 		private void NewLittleSpace()
 		{
-            hud.UpdateMorse(MorseCode.LITTLE_SPACE_CHARAC);
+            currentMorseCode += MorseCode.LITTLE_SPACE_CHARAC;
         }
 
 		private void NewLetter()
 		{
-            hud.UpdateMorse(MorseCode.LETTER_SPACE_CHARAC);
+            currentMorseCode += MorseCode.LETTER_SPACE_CHARAC;
         }
 
 		private void NewWord()
 		{
-            hud.UpdateMorse(MorseCode.WORD_SPACE_CHARAC);
+            currentMorseCode += MorseCode.WORD_SPACE_CHARAC;
         }
 
 		private void DetectInput()
@@ -133,7 +209,6 @@ namespace Com.IsartDigital.OBG.Managers
             if (currentHoldingTime <= DOT_UNIT * unitTime + timeErrorMargin)
 			{
 				NewDot();
-
                 return;
 			}
 			if (currentHoldingTime <= DASH_UNIT * unitTime + timeErrorMargin)
@@ -151,11 +226,17 @@ namespace Com.IsartDigital.OBG.Managers
 			}
 			else if (letterSequence || currentSpacingTime <= WORDS_SPACE_UNIT * unitTime - timeErrorMargin)
 			{
-				NewLetter();
+				if (VerifyCurrentMorse())
+				{
+                    NewLetter();
+                }
 			}
 			else if (currentSpacingTime <= WORDS_SPACE_UNIT * unitTime + timeErrorMargin)
 			{
-				NewWord();
+				if (VerifyCurrentMorse())
+				{
+                    NewWord();
+                }
 			}
 			
 			currentSpacingTime = 0f;
@@ -173,6 +254,7 @@ namespace Com.IsartDigital.OBG.Managers
 
             signalsManager.InputPressed -= InputSignalPressed;
             signalsManager.InputReleased -= InputSignalReleased;
+            signalsManager.PlayButtonPressed -= StartGame;
         }
 	}
 }

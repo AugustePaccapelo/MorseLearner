@@ -1,11 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://f4yxolbl45o3"]
+[gd_scene load_steps=6 format=3 uid="uid://f4yxolbl45o3"]
 
 [ext_resource type="Script" path="res://Scripts/UI/HUD.cs" id="1_pa478"]
+[ext_resource type="Texture2D" uid="uid://dq1h6jmssjh6w" path="res://Assets/Textures/UI/HUD/InGameHUD.png" id="2_ha3e6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bcigg"]
+font_size = 128
 
 [sub_resource type="LabelSettings" id="LabelSettings_ur7ro"]
+font_size = 64
+
+[sub_resource type="LabelSettings" id="LabelSettings_cxe07"]
 font_size = 32
 
-[node name="HUD" type="Control" node_paths=PackedStringArray("morseLabel", "testlab")]
+[node name="HUD" type="Control" node_paths=PackedStringArray("morseLabel", "currentLetterLabel", "confirmationLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,35 +21,63 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_pa478")
-morseLabel = NodePath("Label2")
-testlab = NodePath("Label")
+morseLabel = NodePath("PlayerMorseCode")
+currentLetterLabel = NodePath("CurrentLetter")
+confirmationLabel = NodePath("Confirmation")
 
-[node name="Label" type="Label" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+texture = ExtResource("2_ha3e6")
+expand_mode = 1
+
+[node name="CurrentLetter" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.101852
-anchor_top = 0.0489583
-anchor_right = 0.222
-anchor_bottom = 0.073
-offset_right = 0.120964
-offset_bottom = -0.0800095
-grow_horizontal = 2
-grow_vertical = 2
-text = "In Game"
-metadata/_edit_use_anchors_ = true
+anchor_left = 0.407
+anchor_top = 0.287
+anchor_right = 0.687
+anchor_bottom = 0.498
+offset_left = 0.220001
+offset_top = 0.480011
+offset_right = 0.019989
+offset_bottom = -0.0800171
+text = "A
+"
+label_settings = SubResource("LabelSettings_bcigg")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="."]
+[node name="PlayerMorseCode" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.437
-anchor_top = 0.362
-anchor_right = 0.674
-anchor_bottom = 0.409
-offset_left = 0.019989
-offset_top = 0.47998
-offset_right = 0.039978
-offset_bottom = 0.359985
+anchor_left = 0.172
+anchor_top = 0.55
+anchor_right = 0.919
+anchor_bottom = 0.712
+offset_left = 0.119995
+offset_right = -0.26001
+offset_bottom = 0.47998
 grow_horizontal = 2
 grow_vertical = 2
 text = "MORSE :"
 label_settings = SubResource("LabelSettings_ur7ro")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Confirmation" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.307
+anchor_top = 0.724
+anchor_right = 0.763
+anchor_bottom = 0.771
+offset_left = 0.220001
+offset_top = -0.0400391
+offset_right = -0.0200195
+offset_bottom = -0.160034
+text = "CONFIRMATION"
+label_settings = SubResource("LabelSettings_cxe07")

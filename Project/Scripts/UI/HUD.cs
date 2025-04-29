@@ -24,10 +24,13 @@ namespace Com.IsartDigital.OBG.UI
 
 		// ----- Nodes ----- \\
 		[Export] private Label morseLabel;
-		[Export] public Label testlab;
+		[Export] private Label currentLetterLabel;
+		[Export] private Label confirmationLabel;
 
 		// ----- Others ----- \\
 		private string morseLabelText = "";
+
+		private string wrongMorseCodeConfirmation = "Sorry !";
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -62,9 +65,19 @@ namespace Com.IsartDigital.OBG.UI
 
 		// ----- My Functions ----- \\
 
-		public void UpdateMorse(string pNewCharac)
+		public void UpdateLetter(string pLetter)
 		{
-			morseLabelText += pNewCharac;
+			currentLetterLabel.Text = pLetter;
+		}
+
+		public void UpdateConfirmation(bool pIsWrong)
+		{
+			confirmationLabel.Text = pIsWrong ? wrongMorseCodeConfirmation : "";
+		}
+
+		public void UpdateMorse(string pCode)
+		{
+			morseLabelText = pCode;
 			morseLabel.Text = morseLabelText;
 		}
 

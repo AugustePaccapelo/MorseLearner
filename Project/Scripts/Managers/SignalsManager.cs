@@ -31,12 +31,21 @@ namespace Com.IsartDigital.OBG.Managers
 		// Inputs Signals
 		[Signal] public delegate void InputPressedEventHandler();
 		[Signal] public delegate void InputReleasedEventHandler();
+		[Signal] public delegate void InputDotEventHandler();
+        [Signal] public delegate void InputDashEventHandler();
+        [Signal] public delegate void InputLittleSpaceEventHandler();
+        [Signal] public delegate void InputLetterSpaceEventHandler();
+        [Signal] public delegate void InputWordSpaceEventHandler();
 
-		// ---------- FUNCTIONS ---------- \\
+        [Signal] public delegate void LetterFinishedEventHandler();
+        [Signal] public delegate void WrongCodeEventHandler();
+        [Signal] public delegate void WordFinishedEventHandler();
 
-		// ----- Constructor & Ready & Process ----- \\
+        // ---------- FUNCTIONS ---------- \\
 
-		private SignalsManager() : base() { }
+        // ----- Constructor & Ready & Process ----- \\
+
+        private SignalsManager() : base() { }
 
 		public override void _Ready()
 		{
