@@ -24,6 +24,7 @@ namespace Com.IsartDigital.OBG.UI
 
 		// ----- Nodes ----- \\
 		[Export] private Label morseLabel;
+		[Export] public Label testlab;
 
 		// ----- Others ----- \\
 		private string morseLabelText = "";

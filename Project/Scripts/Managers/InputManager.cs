@@ -1,4 +1,6 @@
+using System.Transactions;
 using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.UI;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -27,6 +29,7 @@ namespace Com.IsartDigital.OBG.managers
 
 		// ----- Others ----- \\
 		public bool canPlay = false;
+		private bool isTouching = false;
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -66,46 +69,33 @@ namespace Com.IsartDigital.OBG.managers
 			// Touch managment
 			if (!canPlay) return;
 
-			// Input for screen
-			if (pEvent is InputEventScreenTouch lEventTouch)
+			if (IsPressedEvent(pEvent) && !isTouching)
 			{
-				if (lEventTouch.IsReleased())
-				{
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
-                }
-                else
-                {
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
-                }
+                isTouching = true;
+                signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
             }
-
-			if (pEvent is InputEventScreenDrag lEventDrag)
+			else if (IsReleasedEvent(pEvent) && isTouching)
 			{
-				if (lEventDrag.IsReleased())
-				{
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
-                }
-				else
-				{
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
-                }
-			}
-
-			// Input for mouse
-			if (pEvent is InputEventMouseButton lEventMouse)
-			{
-				if (lEventMouse.IsReleased())
-				{
-					signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
-                }
-				else
-				{
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
-                }
-			}
+                isTouching = false;
+                signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
+            }
         }
 
         // ----- My Functions ----- \\
+
+		private bool IsPressedEvent(InputEvent pEvent)
+		{
+			if (pEvent is InputEventMouseButton lMouse) return lMouse.Pressed;
+			if (pEvent is InputEventScreenTouch lTouch) return lTouch.Pressed;
+			return false;
+		}
+
+		private bool IsReleasedEvent(InputEvent pEvent)
+		{
+            if (pEvent is InputEventMouseButton lMouse) return !lMouse.Pressed;
+            if (pEvent is InputEventScreenTouch lTouch) return !lTouch.Pressed;
+            return false;
+        }
 
         // ----- Destructor ----- \\
 

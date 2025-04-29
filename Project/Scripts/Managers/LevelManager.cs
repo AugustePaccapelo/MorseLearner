@@ -40,6 +40,8 @@ namespace Com.IsartDigital.OBG.Managers
 		private float currentHoldingTime;
 		private float currentSpacingTime;
 
+		public bool letterSequence = true;
+
 		// ---------- FUNCTIONS ---------- \\
 
 		// ----- Constructor & Ready & Process ----- \\
@@ -126,10 +128,7 @@ namespace Com.IsartDigital.OBG.Managers
         }
 
 		private void DetectInput()
-		{
-			// If click to chort, ignore
-			if (currentHoldingTime < DOT_UNIT * unitTime - timeErrorMargin) return;
-			
+		{	
             // Click
             if (currentHoldingTime <= DOT_UNIT * unitTime + timeErrorMargin)
 			{
@@ -146,18 +145,11 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private void DetectSpace()
 		{
-			if (currentSpacingTime < LITTLE_SPACE_UNIT * unitTime - timeErrorMargin)
-			{
-				inputPressed = false;
-				GD.Print("To short");
-			}
-
-			else if (currentSpacingTime <= LETTERS_SPACE_UNIT * unitTime - timeErrorMargin)
+			if (currentSpacingTime <= LETTERS_SPACE_UNIT * unitTime - timeErrorMargin)
 			{
 				NewLittleSpace();
 			}
-
-			else if (currentSpacingTime <= WORDS_SPACE_UNIT * unitTime - timeErrorMargin)
+			else if (letterSequence || currentSpacingTime <= WORDS_SPACE_UNIT * unitTime - timeErrorMargin)
 			{
 				NewLetter();
 			}
