@@ -1,4 +1,5 @@
 using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -21,14 +22,16 @@ namespace Com.IsartDigital.OBG.UI
 		#endregion
 
 		// ----- Paths ----- \\
+		[Export] private PackedScene goodDotScene;
 
 		// ----- Nodes ----- \\
 		[Export] private Label morseLabel;
 		[Export] private Label currentLetterLabel;
 		[Export] private Label confirmationLabel;
+        [Export] private HBoxContainer morseCodeConainer;
 
-		// ----- Others ----- \\
-		private string morseLabelText = "";
+        // ----- Others ----- \\
+        private string morseLabelText = "";
 
 		private string wrongMorseCodeConfirmation = "Sorry !";
 
@@ -75,10 +78,27 @@ namespace Com.IsartDigital.OBG.UI
 			confirmationLabel.Text = pIsWrong ? wrongMorseCodeConfirmation : "";
 		}
 
-		public void UpdateMorse(string pCode)
+		public void UpdateMorse(string pCharac)
 		{
-			morseLabelText = pCode;
+			if (pCharac == MorseCode.DOT_CHARAC) CreateDot();
+			else  morseLabelText += pCharac;
 			morseLabel.Text = morseLabelText;
+		}
+
+		public void ClearMorseCode()
+		{
+			morseLabelText = "";
+			morseLabel.Text = morseLabelText;
+			foreach (Node lNode in morseCodeConainer.GetChildren())
+			{
+				lNode.QueueFree();
+			}
+		}
+
+		private void CreateDot()
+		{
+			TextureRect lDot = goodDotScene.Instantiate<TextureRect>();
+			morseCodeConainer.AddChild(lDot);
 		}
 
 		// ----- Destructor ----- \\

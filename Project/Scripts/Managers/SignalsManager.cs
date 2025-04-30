@@ -26,16 +26,15 @@ namespace Com.IsartDigital.OBG.Managers
 		// ----- Others ----- \\
 		// Menus Buttons
 		[Signal] public delegate void GoToMainMenuEventHandler();
-		[Signal] public delegate void PlayButtonPressedEventHandler();
+		[Signal] public delegate void GoToLevelSelectorEventHandler();
+		[Signal] public delegate void PlayButtonPressedEventHandler(int pDifficulty);
 
 		// Inputs Signals
 		[Signal] public delegate void InputPressedEventHandler();
 		[Signal] public delegate void InputReleasedEventHandler();
-		[Signal] public delegate void InputDotEventHandler();
-        [Signal] public delegate void InputDashEventHandler();
-        [Signal] public delegate void InputLittleSpaceEventHandler();
-        [Signal] public delegate void InputLetterSpaceEventHandler();
-        [Signal] public delegate void InputWordSpaceEventHandler();
+		[Signal] public delegate void InputClickEventHandler();
+        [Signal] public delegate void InputStartHoldEventHandler();
+        [Signal] public delegate void InputStopHoldEventHandler();
 
         [Signal] public delegate void LetterFinishedEventHandler();
         [Signal] public delegate void WrongCodeEventHandler();

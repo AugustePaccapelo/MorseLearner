@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpgmp6yltnprf"]
+
+[ext_resource type="Script" path="res://Scripts/Managers/LevelSelector.cs" id="1_8sjvv"]
+
+[node name="LevelSelector" type="Control" node_paths=PackedStringArray("learningButton", "easyButton", "normalButton", "hardButton", "hardcoreButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8sjvv")
+learningButton = NodePath("VBoxContainer/Learning")
+easyButton = NodePath("VBoxContainer/Easy")
+normalButton = NodePath("VBoxContainer/Normal")
+hardButton = NodePath("VBoxContainer/Hard")
+hardcoreButton = NodePath("VBoxContainer/HardCore")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.217
+anchor_top = 0.208
+anchor_right = 0.783
+anchor_bottom = 0.792
+offset_left = 74.32
+offset_top = 139.82
+offset_right = -74.32
+offset_bottom = -139.82
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(153, 280)
+theme_override_constants/separation = 20
+
+[node name="Learning" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Learning"
+
+[node name="Easy" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Easy"
+
+[node name="Normal" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Normal"
+
+[node name="Hard" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Hard"
+
+[node name="HardCore" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "HardCore"

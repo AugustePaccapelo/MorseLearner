@@ -29,13 +29,21 @@ namespace Com.IsartDigital.OBG.managers
 
 		// ----- Others ----- \\
 		public bool canPlay = false;
-		private bool isTouching = false;
+		private bool isPressing = false;
+		private bool wasPressing = false;
+		private float currentPressedTime;
+		private bool isHolding = false;
 
-		// ---------- FUNCTIONS ---------- \\
+        private float unitTime = 0.15f;
+        private const int DOT_UNIT = 1;
+        private const int DASH_UNIT = 3;
+        private float timeErrorMargin = 0.1f;
 
-		// ----- Constructor & Ready & Process ----- \\
+        // ---------- FUNCTIONS ---------- \\
 
-		private InputManager() : base() { }
+        // ----- Constructor & Ready & Process ----- \\
+
+        private InputManager() : base() { }
 
 		public override void _Ready()
 		{
@@ -60,6 +68,31 @@ namespace Com.IsartDigital.OBG.managers
 			float lDelta = (float)pDelta;
 
 			base._Process(lDelta);
+
+			if (isPressing)
+			{
+				currentPressedTime += lDelta;
+				if (!isHolding && currentPressedTime > unitTime * DOT_UNIT + timeErrorMargin)
+				{
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputStartHold);
+					isHolding = true;
+                }
+				if (!wasPressing) wasPressing = true;
+			}
+			else if (wasPressing)
+			{
+				if (currentPressedTime <= unitTime * DOT_UNIT + timeErrorMargin)
+				{
+					signalsManager.EmitSignal(SignalsManager.SignalName.InputClick);
+				}
+				else if (isHolding)
+				{
+                    signalsManager.EmitSignal(SignalsManager.SignalName.InputStopHold);
+                    isHolding = false;
+                }
+				currentPressedTime = 0f;
+                wasPressing = false;
+			}
 		}
 
         public override void _Input(InputEvent pEvent)
@@ -69,14 +102,14 @@ namespace Com.IsartDigital.OBG.managers
 			// Touch managment
 			if (!canPlay) return;
 
-			if (IsPressedEvent(pEvent) && !isTouching)
+			if (IsPressedEvent(pEvent) && !isPressing)
 			{
-                isTouching = true;
+                isPressing = true;
                 signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
             }
-			else if (IsReleasedEvent(pEvent) && isTouching)
+			else if (IsReleasedEvent(pEvent) && isPressing)
 			{
-                isTouching = false;
+                isPressing = false;
                 signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
             }
         }
@@ -85,17 +118,27 @@ namespace Com.IsartDigital.OBG.managers
 
 		private bool IsPressedEvent(InputEvent pEvent)
 		{
-			if (pEvent is InputEventMouseButton lMouse) return lMouse.Pressed;
 			if (pEvent is InputEventScreenTouch lTouch) return lTouch.Pressed;
-			return false;
+            if (pEvent is InputEventMouseButton lMouse) return lMouse.Pressed;
+            return false;
 		}
 
 		private bool IsReleasedEvent(InputEvent pEvent)
 		{
-            if (pEvent is InputEventMouseButton lMouse) return !lMouse.Pressed;
             if (pEvent is InputEventScreenTouch lTouch) return !lTouch.Pressed;
+            if (pEvent is InputEventMouseButton lMouse) return !lMouse.Pressed;
             return false;
         }
+
+		private bool InputPressed()
+		{
+			return false;
+		}
+
+		private bool InputReleased()
+		{
+			return false;
+		}
 
         // ----- Destructor ----- \\
 

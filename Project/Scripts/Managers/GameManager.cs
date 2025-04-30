@@ -74,7 +74,7 @@ namespace Com.IsartDigital.OBG.Managers
 		private void CreateAllManagers()
 		{
 			signalsManager = SignalsManager.GetInstance();
-			signalsManager.PlayButtonPressed += PlayPressed;
+			signalsManager.PlayButtonPressed += (pDifficulty) => PlayPressed();
 
 			inputManager = inputManagerScene.Instantiate<InputManager>();
 			AddChild(inputManager);
@@ -101,7 +101,7 @@ namespace Com.IsartDigital.OBG.Managers
 
             base.Dispose(pDisposing);
 
-			signalsManager.PlayButtonPressed -= PlayPressed;
+			signalsManager.PlayButtonPressed -= (pDifficulty) => PlayPressed();
 		}
 	}
 }

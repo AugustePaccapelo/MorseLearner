@@ -26,6 +26,7 @@ namespace Com.IsartDigital.OBG.managers
         // ----- Paths ----- \\
         [Export] private PackedScene titleCardScene;
 		[Export] private PackedScene mainMenuScene;
+		[Export] private PackedScene levelSelectorScene;
 		[Export] private PackedScene hudScene;
 
 		// ----- Nodes ----- \\
@@ -62,7 +63,8 @@ namespace Com.IsartDigital.OBG.managers
 
 			signalsManager = SignalsManager.GetInstance();
 			signalsManager.GoToMainMenu += GoToMainMenu;
-			signalsManager.PlayButtonPressed += PlayPressed;
+			signalsManager.GoToLevelSelector += GoToLevelSelector;
+			signalsManager.PlayButtonPressed += (pDifficulty) => PlayPressed();
 
 			AddChild(titleCardScene.Instantiate());
 		}
@@ -82,9 +84,16 @@ namespace Com.IsartDigital.OBG.managers
 			AddChild(lMainMenu);
 		}
 
+		private void GoToLevelSelector()
+		{
+            MainMenu.GetInstance().QueueFree();
+            LevelSelector lLevelSelector = levelSelectorScene.Instantiate<LevelSelector>();
+			AddChild(lLevelSelector);
+		}
+
 		private void PlayPressed()
 		{
-			MainMenu.GetInstance().QueueFree();
+			LevelSelector.GetInstance().QueueFree();
 			AddChild(hudScene.Instantiate<HUD>());
 		}
 
@@ -99,7 +108,8 @@ namespace Com.IsartDigital.OBG.managers
             base.Dispose(pDisposing);
 
             signalsManager.GoToMainMenu -= GoToMainMenu;
-			signalsManager.PlayButtonPressed -= PlayPressed;
+            signalsManager.GoToLevelSelector -= GoToLevelSelector;
+            signalsManager.PlayButtonPressed -= (pDifficulty) => PlayPressed();
         }
 	}
 }

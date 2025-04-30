@@ -73,7 +73,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private void PlayFunction()
 		{
-            SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.PlayButtonPressed);
+            SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.GoToLevelSelector);
 		}
 
 		private void QuitFunction()
