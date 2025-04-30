@@ -1,3 +1,4 @@
+using System.Diagnostics.SymbolStore;
 using Com.IsartDigital.OBG.Managers;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
@@ -23,16 +24,14 @@ namespace Com.IsartDigital.OBG.UI
 
 		// ----- Paths ----- \\
 		[Export] private PackedScene goodDotScene;
+        [Export] private PackedScene goodDashScene;
 
-		// ----- Nodes ----- \\
-		[Export] private Label morseLabel;
+        // ----- Nodes ----- \\
 		[Export] private Label currentLetterLabel;
 		[Export] private Label confirmationLabel;
         [Export] private HBoxContainer morseCodeConainer;
 
         // ----- Others ----- \\
-        private string morseLabelText = "";
-
 		private string wrongMorseCodeConfirmation = "Sorry !";
 
 		// ---------- FUNCTIONS ---------- \\
@@ -81,14 +80,11 @@ namespace Com.IsartDigital.OBG.UI
 		public void UpdateMorse(string pCharac)
 		{
 			if (pCharac == MorseCode.DOT_CHARAC) CreateDot();
-			else  morseLabelText += pCharac;
-			morseLabel.Text = morseLabelText;
+			else if (pCharac == MorseCode.DASH_CHARAC) CreateDash();
 		}
 
 		public void ClearMorseCode()
 		{
-			morseLabelText = "";
-			morseLabel.Text = morseLabelText;
 			foreach (Node lNode in morseCodeConainer.GetChildren())
 			{
 				lNode.QueueFree();
@@ -99,6 +95,12 @@ namespace Com.IsartDigital.OBG.UI
 		{
 			TextureRect lDot = goodDotScene.Instantiate<TextureRect>();
 			morseCodeConainer.AddChild(lDot);
+		}
+
+		private void CreateDash()
+		{
+			TextureRect lDash = goodDashScene.Instantiate<TextureRect>();
+			morseCodeConainer.AddChild(lDash);
 		}
 
 		// ----- Destructor ----- \\

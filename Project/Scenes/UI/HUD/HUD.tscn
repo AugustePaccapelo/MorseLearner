@@ -2,18 +2,16 @@
 
 [ext_resource type="Script" path="res://Scripts/UI/HUD.cs" id="1_pa478"]
 [ext_resource type="Texture2D" uid="uid://dq1h6jmssjh6w" path="res://Assets/Textures/UI/HUD/InGameHUD.png" id="2_ha3e6"]
+[ext_resource type="PackedScene" uid="uid://fc0l0xucr7h0" path="res://Scenes/Morse/GoodDash.tscn" id="3_fr113"]
 [ext_resource type="PackedScene" uid="uid://dfcmvpri6ptjw" path="res://Scenes/Morse/GoodDot.tscn" id="3_uihj2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bcigg"]
 font_size = 128
 
-[sub_resource type="LabelSettings" id="LabelSettings_ur7ro"]
-font_size = 64
-
 [sub_resource type="LabelSettings" id="LabelSettings_cxe07"]
 font_size = 32
 
-[node name="HUD" type="Control" node_paths=PackedStringArray("morseLabel", "currentLetterLabel", "confirmationLabel", "morseCodeConainer")]
+[node name="HUD" type="Control" node_paths=PackedStringArray("currentLetterLabel", "confirmationLabel", "morseCodeConainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +21,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_pa478")
 goodDotScene = ExtResource("3_uihj2")
-morseLabel = NodePath("PlayerMorseCode")
+goodDashScene = ExtResource("3_fr113")
 currentLetterLabel = NodePath("CurrentLetter")
 confirmationLabel = NodePath("Confirmation")
 morseCodeConainer = NodePath("HBoxContainer")
@@ -56,23 +54,6 @@ label_settings = SubResource("LabelSettings_bcigg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerMorseCode" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.172
-anchor_top = 0.55
-anchor_right = 0.919
-anchor_bottom = 0.712
-offset_left = 0.119995
-offset_right = -0.26001
-offset_bottom = 0.47998
-grow_horizontal = 2
-grow_vertical = 2
-text = "MORSE :"
-label_settings = SubResource("LabelSettings_ur7ro")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Confirmation" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -91,12 +72,12 @@ label_settings = SubResource("LabelSettings_cxe07")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.183
-anchor_top = 0.611
-anchor_right = 0.911
+anchor_top = 0.616
+anchor_right = 0.25
 anchor_bottom = 0.653
 offset_left = 0.179993
-offset_top = -6.56
-offset_right = 0.059967
-offset_bottom = 12.1199
-pivot_offset = Vector2(0, 20)
-theme_override_constants/separation = 20
+offset_top = -0.360046
+offset_bottom = 0.119934
+grow_vertical = 2
+pivot_offset = Vector2(0, 18)
+theme_override_constants/separation = 10
