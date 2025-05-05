@@ -5,7 +5,7 @@ using System;
 
 namespace Com.IsartDigital.OBG.Morse
 {
-	public partial class BrokenDot : Control
+	public abstract partial class MorseCharacter : Control
 	{
 		// ---------- VARIABLES ---------- \\
 
@@ -14,13 +14,12 @@ namespace Com.IsartDigital.OBG.Morse
 		// ----- Nodes ----- \\
 
 		// ----- Others ----- \\
-		private float speed;
 
 		// ---------- FUNCTIONS ---------- \\
 
 		// ----- Constructor & Ready & Process ----- \\
 
-		protected BrokenDot () : base() { }
+		protected MorseCharacter () : base() { }
 
 		public override void _Ready()
 		{
@@ -35,6 +34,9 @@ namespace Com.IsartDigital.OBG.Morse
 		}
 
 		// ----- My Functions ----- \\
+
+		public abstract void SpawnAnimation();
+		public abstract void BrokenAnimation();
 
 		// ----- Destructor ----- \\
 

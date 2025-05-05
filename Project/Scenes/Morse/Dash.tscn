@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://djq5xx1juu2yb"]
+
+[ext_resource type="Script" path="res://Scripts/Morse/Dash.cs" id="1_wanly"]
+[ext_resource type="Texture2D" uid="uid://dh37bjpjn2aug" path="res://Assets/Textures/Morse/GoodDash.png" id="2_hw040"]
+[ext_resource type="Texture2D" uid="uid://dic4awpbx5j0g" path="res://Assets/Textures/Morse/BrokenDashLeft.png" id="3_yfqti"]
+[ext_resource type="Texture2D" uid="uid://b0brgfgfu8n2l" path="res://Assets/Textures/Morse/BrokenDashRight.png" id="4_m5afo"]
+
+[node name="Dash" type="Control"]
+layout_mode = 3
+anchor_right = 0.741
+anchor_bottom = 0.208
+offset_right = -0.140045
+offset_bottom = 0.319992
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wanly")
+
+[node name="Renderer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Good" type="Control" parent="Renderer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="Renderer/Good"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_hw040")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Broken" type="Control" parent="Renderer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Left" type="TextureRect" parent="Renderer/Broken"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -65.0
+offset_right = -65.0
+texture = ExtResource("3_yfqti")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Right" type="TextureRect" parent="Renderer/Broken"]
+layout_mode = 0
+offset_left = 71.0
+offset_right = 471.0
+offset_bottom = 200.0
+texture = ExtResource("4_m5afo")
+expand_mode = 1
+stretch_mode = 5
