@@ -59,7 +59,7 @@ namespace Com.IsartDigital.OBG.Morse
 
         public override void BrokenAnimation()
         {
-            SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
+            GetTree().CreateTimer(0.2).Timeout += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
         }
 
         // ----- Destructor ----- \\
