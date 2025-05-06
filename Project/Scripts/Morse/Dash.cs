@@ -45,8 +45,7 @@ namespace Com.IsartDigital.OBG.Morse
         {
             Tween lTween = CreateTween();
             lTween.TweenProperty(this, TweenProperties.SCALE, endScale, spawnDuration * 0.5f).From(startScale);
-            //lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.VerifyCode);
-            lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter);
+            lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter, this);
             lTween.Play();
         }
 

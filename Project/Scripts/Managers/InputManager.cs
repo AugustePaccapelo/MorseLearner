@@ -34,7 +34,7 @@ namespace Com.IsartDigital.OBG.managers
 		private float currentPressedTime;
 		private bool isHolding = false;
 
-        private float unitTime = 0.15f;
+        private float unitTime = 0.1f;
         private const int DOT_UNIT = 1;
         private const int DASH_UNIT = 3;
         private float timeErrorMargin = 0.1f;
@@ -84,13 +84,11 @@ namespace Com.IsartDigital.OBG.managers
 				if (currentPressedTime <= unitTime * DOT_UNIT + timeErrorMargin)
 				{
 					signalsManager.EmitSignal(SignalsManager.SignalName.InputClick);
-					canPlay = false;
 				}
 				else if (isHolding)
 				{
                     signalsManager.EmitSignal(SignalsManager.SignalName.InputStopHold);
                     isHolding = false;
-					canPlay = false;
                 }
 				currentPressedTime = 0f;
                 wasPressing = false;

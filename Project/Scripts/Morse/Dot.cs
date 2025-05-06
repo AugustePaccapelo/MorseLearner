@@ -26,6 +26,7 @@ namespace Com.IsartDigital.OBG.Morse
         private float waitTimeForBrokenAnim = 0.25f;
 		private float borkenAnimDuration = 0.5f;
 		private float fadeDuration = 0.75f;
+		private float borkenWaitTime = 0.15f;
 
 		private float brokenStartRotation = 45f;
 
@@ -53,8 +54,7 @@ namespace Com.IsartDigital.OBG.Morse
         {
 			Tween lTween = CreateTween();
 			lTween.TweenProperty(this, TweenProperties.SCALE, endScale, spawnDuration).From(startScale);
-			lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter);
-			//lTween.Finished += () => executeWhenFinished();
+			lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter, this);
 			lTween.Play();
         }
 
@@ -70,7 +70,9 @@ namespace Com.IsartDigital.OBG.Morse
 			Tween lTween = CreateTween();
 			float lAngle = Mathf.DegToRad(brokenStartRotation);
 			lTween.TweenProperty(leftBroken, TweenProperties.ROTATION, -lAngle, brokenStartAnimDuration);
-			lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
+            lTween.Parallel().TweenProperty(rightBroken, TweenProperties.ROTATION, lAngle, brokenStartAnimDuration);
+			lTween.Chain().TweenInterval(waitTimeForBrokenAnim);
+            lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
         }
 
         // ----- Destructor ----- \\

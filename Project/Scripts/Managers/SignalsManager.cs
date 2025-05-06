@@ -1,3 +1,4 @@
+using Com.IsartDigital.OBG.Morse;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -42,7 +43,7 @@ namespace Com.IsartDigital.OBG.Managers
 		[Signal] public delegate void SpawnAnimationFinishedEventHandler();
 
 		[Signal] public delegate void VerifyCodeEventHandler();
-		[Signal] public delegate void NewCharacterEventHandler();
+		[Signal] public delegate void NewCharacterEventHandler(MorseCharacter pCharac);
 		[Signal] public delegate void WrongCharacterEventHandler();
 
         // ---------- FUNCTIONS ---------- \\

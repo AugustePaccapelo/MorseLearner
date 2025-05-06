@@ -55,7 +55,6 @@ namespace Com.IsartDigital.OBG.Managers
             instance = this;
             #endregion
 
-
             base._Ready();
 
 			screenSize = GetViewportRect().Size;

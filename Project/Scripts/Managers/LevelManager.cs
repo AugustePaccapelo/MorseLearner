@@ -41,11 +41,11 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private string[] allLetters;
 
-		public bool letterSequence = true;
 		private string currentLetter;
 		private string currentLetterMorseCode;
 		private string currentMorseCode;
 		private bool wasWrong = false;
+		private bool isCurrentlyWrong = false;
 
         public List<MorseCharacter> allMorseCharacters = new List<MorseCharacter>();
         [Export] private float morseHeight = 40f;
@@ -111,19 +111,18 @@ namespace Com.IsartDigital.OBG.Managers
 			currentLetterMorseCode = lCurrentMorseCode;
             ClearMorseCode();
             hud.UpdateLetter(currentLetter);
-		}
+        }
 
-		public void NewCharacter()
+		public void NewCharacter(MorseCharacter pCharac)
 		{
-			if (IsLastCharacterGood())
+            if (!isCurrentlyWrong)
 			{
                 if (wasWrong)
                 {
                     wasWrong = false;
                     hud.UpdateConfirmation(false);
                 }
-                allMorseCharacters.Last().GoodAnimation();
-				InputManager.GetInstance().canPlay = true;
+                pCharac.GoodAnimation();
 				if (IsCodeFinished())
 				{
 					GetRandomLetter();
@@ -131,17 +130,23 @@ namespace Com.IsartDigital.OBG.Managers
 			}
 			else
 			{
+				isCurrentlyWrong = true;
                 foreach (MorseCharacter lCharac in allMorseCharacters)
                 {
                     lCharac.SetBroken();
                 }
-                allMorseCharacters.Last().BrokenAnimation();
+                pCharac.BrokenAnimation();
             }
+		}
+
+		private void VerifyCurrentCode()
+		{
+			if (isCurrentlyWrong) return;
+			isCurrentlyWrong = !IsLastCharacterGood();
 		}
 
 		public void WrongCharacter()
 		{
-            InputManager.GetInstance().canPlay = true;
             wasWrong = true;
             hud.UpdateConfirmation(true);
             ClearMorseCode();
@@ -150,6 +155,7 @@ namespace Com.IsartDigital.OBG.Managers
 		private bool IsLastCharacterGood()
 		{
 			int lLastCharacIndex = currentMorseCode.Length - 1;
+			if (lLastCharacIndex >= currentLetterMorseCode.Length) return false;
 			return currentLetterMorseCode[lLastCharacIndex] == currentMorseCode[lLastCharacIndex];
 		}
 
@@ -182,6 +188,7 @@ namespace Com.IsartDigital.OBG.Managers
                 allMorseCharacters[i].QueueFree();
                 allMorseCharacters.RemoveAt(i);
             }
+            isCurrentlyWrong = false;
         }
 
         private Vector2 GetLastPosition(MorseCharacter pMorse)
@@ -205,6 +212,7 @@ namespace Com.IsartDigital.OBG.Managers
             lDot.GlobalPosition = GetLastPosition(lDot);
             allMorseCharacters.Add(lDot);
             lDot.SpawnAnimation();
+			VerifyCurrentCode();
         }
 
 		private void NewDash()
@@ -216,6 +224,7 @@ namespace Com.IsartDigital.OBG.Managers
             lDash.GlobalPosition = GetLastPosition(lDash);
             allMorseCharacters.Add(lDash);
             lDash.SpawnAnimation();
+			VerifyCurrentCode();
         }
 
 		// ----- Destructor ----- \\
