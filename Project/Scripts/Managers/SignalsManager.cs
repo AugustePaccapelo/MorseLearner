@@ -29,6 +29,7 @@ namespace Com.IsartDigital.OBG.Managers
 		[Signal] public delegate void GoToMainMenuEventHandler();
 		[Signal] public delegate void GoToLevelSelectorEventHandler();
 		[Signal] public delegate void PlayButtonPressedEventHandler(int pDifficulty);
+		[Signal] public delegate void LaunchGameEventHandler(int pDifficulty);
 
 		// Inputs Signals
 		[Signal] public delegate void InputPressedEventHandler();

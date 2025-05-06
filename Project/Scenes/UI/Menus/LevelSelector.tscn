@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpgmp6yltnprf"]
+[gd_scene load_steps=3 format=3 uid="uid://cpgmp6yltnprf"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/LevelSelector.cs" id="1_8sjvv"]
+[ext_resource type="PackedScene" uid="uid://bxmelcxyghkh3" path="res://Scenes/UI/Menus/HelpScreen.tscn" id="2_038nx"]
 
 [node name="LevelSelector" type="Control" node_paths=PackedStringArray("learningButton", "easyButton", "normalButton", "hardButton", "hardcoreButton")]
 layout_mode = 3
@@ -10,11 +11,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8sjvv")
+helpScreenScene = ExtResource("2_038nx")
 learningButton = NodePath("VBoxContainer/Learning")
 easyButton = NodePath("VBoxContainer/Easy")
 normalButton = NodePath("VBoxContainer/Normal")
 hardButton = NodePath("VBoxContainer/Hard")
 hardcoreButton = NodePath("VBoxContainer/HardCore")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.866378, 0.598776, 0.119909, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1

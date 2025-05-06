@@ -3,6 +3,7 @@ using System.Linq;
 using Com.IsartDigital.OBG.managers;
 using Com.IsartDigital.OBG.Morse;
 using Com.IsartDigital.OBG.UI;
+using Com.IsartDigital.OBG.UI.Menus;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
 
@@ -78,7 +79,7 @@ namespace Com.IsartDigital.OBG.Managers
 			signalsManager.InputClick += InputClick;
 			signalsManager.InputStartHold += InputStartHold;
 			signalsManager.InputStopHold += InputStopHold;
-			signalsManager.PlayButtonPressed += StartGame;
+			signalsManager.LaunchGame += StartGame;
 			
 			signalsManager.NewCharacter += NewCharacter;
 			signalsManager.WrongCharacter += WrongCharacter;
@@ -98,6 +99,10 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private void StartGame(int pDifficulty)
 		{
+			if (pDifficulty == 0)
+			{
+				allLetters = allLetters.Take(LevelSelector.numLettersKnown).ToArray();
+			}
 			GetRandomLetter();
 		}
 

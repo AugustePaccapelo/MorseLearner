@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cglhvdgwym2pj"]
+
+[ext_resource type="Texture2D" uid="uid://dh37bjpjn2aug" path="res://Assets/Textures/Morse/GoodDash.png" id="1_av06f"]
+
+[node name="DashTextureRect" type="TextureRect"]
+custom_minimum_size = Vector2(40, 20)
+anchors_preset = -1
+anchor_right = 0.37
+anchor_bottom = 0.104
+offset_right = 0.199997
+offset_bottom = 0.159996
+size_flags_vertical = 4
+texture = ExtResource("1_av06f")
+expand_mode = 1
+stretch_mode = 4

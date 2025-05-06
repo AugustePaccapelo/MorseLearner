@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxm0f60b5hai3"]
+
+[ext_resource type="Texture2D" uid="uid://cii5pdbtdrtum" path="res://Assets/Textures/Morse/GoodDot.png" id="1_hp5k3"]
+
+[node name="DotTextureRect" type="TextureRect"]
+custom_minimum_size = Vector2(20, 20)
+anchors_preset = -1
+anchor_right = 0.185
+anchor_bottom = 0.104
+offset_right = 0.0999985
+offset_bottom = 0.159996
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+texture = ExtResource("1_hp5k3")
+expand_mode = 1
+stretch_mode = 4

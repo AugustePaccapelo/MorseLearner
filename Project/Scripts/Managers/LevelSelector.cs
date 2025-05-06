@@ -1,3 +1,5 @@
+using Com.IsartDigital.OBG.managers;
+using Com.IsartDigital.OBG.UI.Menus;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -17,14 +19,16 @@ namespace Com.IsartDigital.OBG.Managers
 			return instance;
 
 		}
-		#endregion
+        #endregion
 
-		// ----- Paths ----- \\
+        // ----- Paths ----- \\
+        [Export] private PackedScene helpScreenScene;
 
-		// ----- Nodes ----- \\
-		[Export] private Button learningButton, easyButton, normalButton, hardButton, hardcoreButton;
+        // ----- Nodes ----- \\
+        [Export] private Button learningButton, easyButton, normalButton, hardButton, hardcoreButton;
 
 		// ----- Others ----- \\
+		public static int numLettersKnown = 3;
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -65,7 +69,16 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private void PlayGame(int pDifficulty)
 		{
-			SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.PlayButtonPressed, pDifficulty);
+			if (pDifficulty == 0)
+			{
+				HelpScreen lHelp = helpScreenScene.Instantiate<HelpScreen>();
+				lHelp.numLettersKnown = numLettersKnown;
+				UIManager.GetInstance().AddChild(lHelp);
+			}
+			else
+			{
+				SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.PlayButtonPressed, pDifficulty);
+			}
 		}
 
 		// ----- Destructor ----- \\
