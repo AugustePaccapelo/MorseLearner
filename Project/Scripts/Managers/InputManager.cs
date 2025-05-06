@@ -84,11 +84,13 @@ namespace Com.IsartDigital.OBG.managers
 				if (currentPressedTime <= unitTime * DOT_UNIT + timeErrorMargin)
 				{
 					signalsManager.EmitSignal(SignalsManager.SignalName.InputClick);
+					canPlay = false;
 				}
 				else if (isHolding)
 				{
                     signalsManager.EmitSignal(SignalsManager.SignalName.InputStopHold);
                     isHolding = false;
+					canPlay = false;
                 }
 				currentPressedTime = 0f;
                 wasPressing = false;

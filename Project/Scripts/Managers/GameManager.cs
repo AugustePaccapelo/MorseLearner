@@ -27,6 +27,7 @@ namespace Com.IsartDigital.OBG.Managers
         [Export] private PackedScene uiManagerScene;
 
 		// ----- Nodes ----- \\
+		[Export] public Node2D gameContainer { get; private set; }
 		private SignalsManager signalsManager;
 		private InputManager inputManager;
 		private LevelManager levelManager;

@@ -1,3 +1,5 @@
+using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 using System;
 
@@ -14,6 +16,18 @@ namespace Com.IsartDigital.OBG.Morse
 		// ----- Nodes ----- \\
 
 		// ----- Others ----- \\
+		// Spawning tween parameter
+		private Vector2 startScale = Vector2.Zero;
+		private Vector2 endScale = new Vector2(1.5f, 1.5f);
+		private float spawnDuration = 0.15f;
+		private float goodAnimDuration = 0.15f;
+		private float brokenStartAnimDuration = 0.25f;
+        
+        private float waitTimeForBrokenAnim = 0.25f;
+		private float borkenAnimDuration = 0.5f;
+		private float fadeDuration = 0.75f;
+
+		private float brokenStartRotation = 45f;
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -37,12 +51,26 @@ namespace Com.IsartDigital.OBG.Morse
 
         public override void SpawnAnimation()
         {
-            
+			Tween lTween = CreateTween();
+			lTween.TweenProperty(this, TweenProperties.SCALE, endScale, spawnDuration).From(startScale);
+			lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter);
+			//lTween.Finished += () => executeWhenFinished();
+			lTween.Play();
+        }
+
+		public override void GoodAnimation()
+		{
+			Tween lTween = CreateTween();
+            lTween.TweenProperty(this, TweenProperties.SCALE, Vector2.One, goodAnimDuration).From(endScale);
+			lTween.Play();
         }
 
         public override void BrokenAnimation()
         {
-            
+			Tween lTween = CreateTween();
+			float lAngle = Mathf.DegToRad(brokenStartRotation);
+			lTween.TweenProperty(leftBroken, TweenProperties.ROTATION, -lAngle, brokenStartAnimDuration);
+			lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
         }
 
         // ----- Destructor ----- \\

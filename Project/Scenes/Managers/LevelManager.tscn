@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3qpd1q8p5efh"]
+[gd_scene load_steps=4 format=3 uid="uid://d3qpd1q8p5efh"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/LevelManager.cs" id="1_bia3o"]
+[ext_resource type="PackedScene" uid="uid://bvsyjpf5lqv5h" path="res://Scenes/Morse/Dot.tscn" id="2_7xddh"]
+[ext_resource type="PackedScene" uid="uid://dab201ag8vxjg" path="res://Scenes/Morse/Dash.tscn" id="3_y08f3"]
 
 [node name="LevelManager" type="Node2D"]
 script = ExtResource("1_bia3o")
+DotScene = ExtResource("2_7xddh")
+DashScene = ExtResource("3_y08f3")

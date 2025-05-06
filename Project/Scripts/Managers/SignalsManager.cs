@@ -39,6 +39,11 @@ namespace Com.IsartDigital.OBG.Managers
         [Signal] public delegate void LetterFinishedEventHandler();
         [Signal] public delegate void WrongCodeEventHandler();
         [Signal] public delegate void WordFinishedEventHandler();
+		[Signal] public delegate void SpawnAnimationFinishedEventHandler();
+
+		[Signal] public delegate void VerifyCodeEventHandler();
+		[Signal] public delegate void NewCharacterEventHandler();
+		[Signal] public delegate void WrongCharacterEventHandler();
 
         // ---------- FUNCTIONS ---------- \\
 

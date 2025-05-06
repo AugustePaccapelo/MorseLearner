@@ -1,5 +1,9 @@
+using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.Morse;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
 
@@ -23,15 +27,13 @@ namespace Com.IsartDigital.OBG.UI
 		#endregion
 
 		// ----- Paths ----- \\
-		[Export] private PackedScene goodDotScene;
-        [Export] private PackedScene goodDashScene;
 
         // ----- Nodes ----- \\
 		[Export] private Label currentLetterLabel;
 		[Export] private Label confirmationLabel;
-        [Export] private HBoxContainer morseCodeConainer;
+        [Export] public Control startMorseCodePos { get; private set; }
 
-        // ----- Others ----- \\
+		// ----- Others ----- \\
 		private string wrongMorseCodeConfirmation = "Sorry !";
 
 		// ---------- FUNCTIONS ---------- \\
@@ -56,6 +58,7 @@ namespace Com.IsartDigital.OBG.UI
 			base._Ready();
 
 			LevelManager.GetInstance().hud = this;
+			LevelManager.GetInstance().startMorseCodePos = startMorseCodePos;
 		}
 
 		public override void _Process(double pDelta)
@@ -75,32 +78,6 @@ namespace Com.IsartDigital.OBG.UI
 		public void UpdateConfirmation(bool pIsWrong)
 		{
 			confirmationLabel.Text = pIsWrong ? wrongMorseCodeConfirmation : "";
-		}
-
-		public void UpdateMorse(string pCharac)
-		{
-			if (pCharac == MorseCode.DOT_CHARAC) CreateDot();
-			else if (pCharac == MorseCode.DASH_CHARAC) CreateDash();
-		}
-
-		public void ClearMorseCode()
-		{
-			foreach (Node lNode in morseCodeConainer.GetChildren())
-			{
-				lNode.QueueFree();
-			}
-		}
-
-		private void CreateDot()
-		{
-			TextureRect lDot = goodDotScene.Instantiate<TextureRect>();
-			morseCodeConainer.AddChild(lDot);
-		}
-
-		private void CreateDash()
-		{
-			TextureRect lDash = goodDashScene.Instantiate<TextureRect>();
-			morseCodeConainer.AddChild(lDash);
 		}
 
 		// ----- Destructor ----- \\

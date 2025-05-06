@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Com.IsartDigital.OBG.managers;
+using Com.IsartDigital.OBG.Morse;
 using Com.IsartDigital.OBG.UI;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
@@ -21,17 +23,21 @@ namespace Com.IsartDigital.OBG.Managers
 			return instance;
 
 		}
-		#endregion
+        #endregion
 
-		// ----- Paths ----- \\
+        // ----- Paths ----- \\
+        [Export] private PackedScene DotScene;
+        [Export] private PackedScene DashScene;
 
-		// ----- Nodes ----- \\
-		private SignalsManager signalsManager;
+        // ----- Nodes ----- \\
+        private SignalsManager signalsManager;
 		public HUD hud;
+        private Node2D gameContainer;
+        public Control startMorseCodePos;
 
-		// ----- Others ----- \\
+        // ----- Others ----- \\
 
-		private RandomNumberGenerator rand = new RandomNumberGenerator();
+        private RandomNumberGenerator rand = new RandomNumberGenerator();
 
 		private string[] allLetters;
 
@@ -41,11 +47,15 @@ namespace Com.IsartDigital.OBG.Managers
 		private string currentMorseCode;
 		private bool wasWrong = false;
 
-		// ---------- FUNCTIONS ---------- \\
+        public List<MorseCharacter> allMorseCharacters = new List<MorseCharacter>();
+        [Export] private float morseHeight = 40f;
+        [Export] private float separation = 10f;
 
-		// ----- Constructor & Ready & Process ----- \\
+        // ---------- FUNCTIONS ---------- \\
 
-		private LevelManager() : base() { }
+        // ----- Constructor & Ready & Process ----- \\
+
+        private LevelManager() : base() { }
 
 		public override void _Ready()
 		{
@@ -69,9 +79,13 @@ namespace Com.IsartDigital.OBG.Managers
 			signalsManager.InputStartHold += InputStartHold;
 			signalsManager.InputStopHold += InputStopHold;
 			signalsManager.PlayButtonPressed += StartGame;
+			
+			signalsManager.NewCharacter += NewCharacter;
+			signalsManager.WrongCharacter += WrongCharacter;
 
 			allLetters = MorseCode.alphabet.Keys.ToArray();
-		}
+            gameContainer = GameManager.GetInstance().gameContainer;
+        }
 
 		public override void _Process(double pDelta)
 		{
@@ -95,44 +109,58 @@ namespace Com.IsartDigital.OBG.Managers
 			string lCurrentMorseCode = MorseCode.alphabet[lCurrentLetter];
 			currentLetter = lCurrentLetter;
 			currentLetterMorseCode = lCurrentMorseCode;
-			currentMorseCode = "";
-            hud.ClearMorseCode();
+            ClearMorseCode();
             hud.UpdateLetter(currentLetter);
 		}
 
-		private bool IsCurrentCodeCorrect()
+		public void NewCharacter()
 		{
-            return currentMorseCode == currentLetterMorseCode.Substring(0, currentMorseCode.Length);
+			if (IsLastCharacterGood())
+			{
+                if (wasWrong)
+                {
+                    wasWrong = false;
+                    hud.UpdateConfirmation(false);
+                }
+                allMorseCharacters.Last().GoodAnimation();
+				InputManager.GetInstance().canPlay = true;
+				if (IsCodeFinished())
+				{
+					GetRandomLetter();
+				}
+			}
+			else
+			{
+                foreach (MorseCharacter lCharac in allMorseCharacters)
+                {
+                    lCharac.SetBroken();
+                }
+                allMorseCharacters.Last().BrokenAnimation();
+            }
 		}
 
-		private bool VerifyCurrentMorse()
+		public void WrongCharacter()
 		{
-			if (!IsCurrentCodeCorrect())
-			{
-                wasWrong = true;
-                hud.UpdateConfirmation(true);
-                currentMorseCode = "";
-				hud.ClearMorseCode();
-            }
-			else if (wasWrong)
-			{
-                wasWrong = false;
-                hud.UpdateConfirmation(false);
-                return true;
-            }
-
-			return false;
+            InputManager.GetInstance().canPlay = true;
+            wasWrong = true;
+            hud.UpdateConfirmation(true);
+            ClearMorseCode();
         }
+
+		private bool IsLastCharacterGood()
+		{
+			int lLastCharacIndex = currentMorseCode.Length - 1;
+			return currentLetterMorseCode[lLastCharacIndex] == currentMorseCode[lLastCharacIndex];
+		}
 
 		private bool IsCodeFinished()
 		{
-			return currentMorseCode.Length == currentLetterMorseCode.Length && IsCurrentCodeCorrect();
+			return currentLetterMorseCode.Length == currentMorseCode.Length;
 		}
 
 		private void InputClick()
 		{
 			NewDot();
-			NewCharacter();
         }
 
 		private void InputStartHold()
@@ -142,33 +170,52 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private void InputStopHold()
 		{
-            NewCharacter();
+            
         }
 
-		private void NewCharacter()
-		{
-            if (IsCodeFinished())
+        public void ClearMorseCode()
+        {
+			currentMorseCode = "";
+            int lLength = allMorseCharacters.Count - 1;
+            for (int i = lLength; i > -1; i--)
             {
-                GD.Print("GG !");
-                GetRandomLetter();
+                allMorseCharacters[i].QueueFree();
+                allMorseCharacters.RemoveAt(i);
             }
-			else
-			{
-				VerifyCurrentMorse();
-			}
         }
 
-		private void NewDot()
+        private Vector2 GetLastPosition(MorseCharacter pMorse)
+        {
+            Vector2 lPos = startMorseCodePos.GlobalPosition;
+            if (allMorseCharacters.Count > 0)
+            {
+                MorseCharacter lLast = allMorseCharacters.Last();
+                lPos.X = lLast.GlobalPosition.X + lLast.TextureSize.X * 0.5f;
+            }
+            lPos.X += pMorse.TextureSize.X * 0.5f + separation;
+            return lPos;
+        }
+
+        private void NewDot()
 		{
-			string lCharac = MorseCode.DOT_CHARAC;
+			char lCharac = MorseCode.DOT_CHARAC;
 			currentMorseCode += lCharac;
-            hud.UpdateMorse(lCharac);
+            Dot lDot = DotScene.Instantiate<Dot>();
+            gameContainer.AddChild(lDot);
+            lDot.GlobalPosition = GetLastPosition(lDot);
+            allMorseCharacters.Add(lDot);
+            lDot.SpawnAnimation();
         }
 
 		private void NewDash()
 		{
-            currentMorseCode += MorseCode.DASH_CHARAC;
-            hud.UpdateMorse(MorseCode.DASH_CHARAC);
+            char lCharac = MorseCode.DASH_CHARAC;
+            currentMorseCode += lCharac;
+            Dash lDash = DashScene.Instantiate<Dash>();
+            gameContainer.AddChild(lDash);
+            lDash.GlobalPosition = GetLastPosition(lDash);
+            allMorseCharacters.Add(lDash);
+            lDash.SpawnAnimation();
         }
 
 		// ----- Destructor ----- \\
@@ -185,6 +232,9 @@ namespace Com.IsartDigital.OBG.Managers
             signalsManager.InputStartHold -= InputStartHold;
             signalsManager.InputStopHold -= InputStopHold;
             signalsManager.PlayButtonPressed -= StartGame;
+
+            signalsManager.NewCharacter -= NewCharacter;
+            signalsManager.WrongCharacter -= WrongCharacter;
         }
 	}
 }

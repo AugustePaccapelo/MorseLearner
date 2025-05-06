@@ -1,67 +1,36 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkmob7d5mbmac"]
+[gd_scene load_steps=5 format=3 uid="uid://bvsyjpf5lqv5h"]
 
 [ext_resource type="Script" path="res://Scripts/Morse/Dot.cs" id="1_htr5k"]
 [ext_resource type="Texture2D" uid="uid://cii5pdbtdrtum" path="res://Assets/Textures/Morse/GoodDot.png" id="1_w8b6r"]
 [ext_resource type="Texture2D" uid="uid://cai57eh0ybtps" path="res://Assets/Textures/Morse/BrokenDotLeft.png" id="2_0hevh"]
 [ext_resource type="Texture2D" uid="uid://s1tlq8ulaoix" path="res://Assets/Textures/Morse/BrokenDotRight.png" id="3_16o6t"]
 
-[node name="Dot" type="Control"]
-layout_mode = 3
-anchor_right = 0.37
-anchor_bottom = 0.208
-offset_right = 0.199997
-offset_bottom = 0.319992
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Dot" type="Node2D" node_paths=PackedStringArray("defaultSprite", "renderer", "goodVisual", "brokenVisual", "leftBroken", "rightBroken")]
 script = ExtResource("1_htr5k")
+defaultSprite = NodePath("Renderer/Good/Sprite2D")
+renderer = NodePath("Renderer")
+goodVisual = NodePath("Renderer/Good")
+brokenVisual = NodePath("Renderer/Broken")
+leftBroken = NodePath("Renderer/Broken/Left")
+rightBroken = NodePath("Renderer/Broken/Right")
 
-[node name="Renderer" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Renderer" type="Node2D" parent="."]
+scale = Vector2(0.07, 0.07)
 
-[node name="Good" type="Control" parent="Renderer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Good" type="Node2D" parent="Renderer"]
 
-[node name="TextureRect" type="TextureRect" parent="Renderer/Good"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Sprite2D" type="Sprite2D" parent="Renderer/Good"]
 texture = ExtResource("1_w8b6r")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="Broken" type="Control" parent="Renderer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Broken" type="Node2D" parent="Renderer"]
+visible = false
 
-[node name="Left" type="TextureRect" parent="Renderer/Broken"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Left" type="Sprite2D" parent="Renderer/Broken"]
+position = Vector2(0, 242.857)
 texture = ExtResource("2_0hevh")
-expand_mode = 1
-stretch_mode = 4
+offset = Vector2(-50, -242.857)
 
-[node name="Right" type="TextureRect" parent="Renderer/Broken"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.15
-anchor_right = 1.15
-anchor_bottom = 1.0
-offset_right = -1.52588e-05
+[node name="Right" type="Sprite2D" parent="Renderer/Broken"]
+position = Vector2(0, 242.857)
 texture = ExtResource("3_16o6t")
-expand_mode = 1
-stretch_mode = 5
+offset = Vector2(81, -242.857)

@@ -1,3 +1,5 @@
+using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 using System;
 
@@ -7,24 +9,28 @@ namespace Com.IsartDigital.OBG.Morse
 {
 	public partial class Dash : MorseCharacter
 	{
-		// ---------- VARIABLES ---------- \\
+        // ---------- VARIABLES ---------- \\
 
-		// ----- Paths ----- \\
+        // ----- Paths ----- \\
 
-		// ----- Nodes ----- \\
+        // ----- Nodes ----- \\
 
-		// ----- Others ----- \\
+        // ----- Others ----- \\
+        // Spawning tween parameter
+        private Vector2 startScale = Vector2.Zero;
+        private Vector2 endScale = new Vector2(1.5f, 1.5f);
+        private float spawnDuration = 0.3f;
 
-		// ---------- FUNCTIONS ---------- \\
+        // ---------- FUNCTIONS ---------- \\
 
-		// ----- Constructor & Ready & Process ----- \\
+        // ----- Constructor & Ready & Process ----- \\
 
-		protected Dash () : base() { }
+        protected Dash () : base() { }
 
 		public override void _Ready()
 		{
 			base._Ready();
-		}
+        }
 
 		public override void _Process(double pDelta)
 		{
@@ -37,12 +43,23 @@ namespace Com.IsartDigital.OBG.Morse
 
         public override void SpawnAnimation()
         {
-            
+            Tween lTween = CreateTween();
+            lTween.TweenProperty(this, TweenProperties.SCALE, endScale, spawnDuration * 0.5f).From(startScale);
+            //lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.VerifyCode);
+            lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter);
+            lTween.Play();
+        }
+
+        public override void GoodAnimation()
+        {
+            Tween lTween = CreateTween();
+            lTween.Chain().TweenProperty(this, TweenProperties.SCALE, Vector2.One, spawnDuration * 0.5f).From(endScale);
+            lTween.Play();
         }
 
         public override void BrokenAnimation()
         {
-            
+            SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
         }
 
         // ----- Destructor ----- \\
