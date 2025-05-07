@@ -64,7 +64,7 @@ namespace Com.IsartDigital.OBG.managers
 			signalsManager = SignalsManager.GetInstance();
 			signalsManager.GoToMainMenu += GoToMainMenu;
 			signalsManager.GoToLevelSelector += GoToLevelSelector;
-			signalsManager.PlayButtonPressed += (pDifficulty) => PlayPressed();
+			signalsManager.LaunchGame += LaunchGame;
 
 			AddChild(titleCardScene.Instantiate());
 		}
@@ -91,10 +91,11 @@ namespace Com.IsartDigital.OBG.managers
 			AddChild(lLevelSelector);
 		}
 
-		private void PlayPressed()
+		private void LaunchGame(int pDifficulty)
 		{
 			LevelSelector.GetInstance().QueueFree();
 			AddChild(hudScene.Instantiate<HUD>());
+			LevelManager.GetInstance().StartGame(pDifficulty);
 		}
 
 		// ----- Destructor ----- \\
@@ -109,7 +110,7 @@ namespace Com.IsartDigital.OBG.managers
 
             signalsManager.GoToMainMenu -= GoToMainMenu;
             signalsManager.GoToLevelSelector -= GoToLevelSelector;
-            signalsManager.PlayButtonPressed -= (pDifficulty) => PlayPressed();
+            signalsManager.PlayButtonPressed -= LaunchGame;
         }
 	}
 }

@@ -77,7 +77,7 @@ namespace Com.IsartDigital.OBG.Managers
 			}
 			else
 			{
-				SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.PlayButtonPressed, pDifficulty);
+				SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.LaunchGame, pDifficulty);
 			}
 		}
 

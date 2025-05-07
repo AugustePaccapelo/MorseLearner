@@ -58,6 +58,8 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 			base._Ready();
 
+			playButton.Pressed += PlayButtonPressed;
+
 			foreach (HBoxContainer lCont in vBoxCont.GetChildren())
 			{
 				allHBoxContainers.Add(lCont);

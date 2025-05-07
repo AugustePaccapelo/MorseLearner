@@ -79,7 +79,6 @@ namespace Com.IsartDigital.OBG.Managers
 			signalsManager.InputClick += InputClick;
 			signalsManager.InputStartHold += InputStartHold;
 			signalsManager.InputStopHold += InputStopHold;
-			signalsManager.LaunchGame += StartGame;
 			
 			signalsManager.NewCharacter += NewCharacter;
 			signalsManager.WrongCharacter += WrongCharacter;
@@ -97,7 +96,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- My Functions ----- \\
 
-		private void StartGame(int pDifficulty)
+		public void StartGame(int pDifficulty)
 		{
 			if (pDifficulty == 0)
 			{
