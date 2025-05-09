@@ -1,10 +1,38 @@
-[gd_scene load_steps=2 format=3 uid="uid://6c8c8iecn3wf"]
+[gd_scene load_steps=5 format=3 uid="uid://6c8c8iecn3wf"]
 
 [ext_resource type="PackedScene" uid="uid://cxvx0rsm0ls5w" path="res://Scenes/Managers/GameManager.tscn" id="1_1k356"]
+[ext_resource type="PackedScene" uid="uid://bk10molxe5ied" path="res://Scenes/Managers/InputManager.tscn" id="2_xwyp1"]
+[ext_resource type="PackedScene" uid="uid://bdlfwj4cousro" path="res://Scenes/Managers/UIManager.tscn" id="3_w8xrj"]
+[ext_resource type="PackedScene" uid="uid://d3qpd1q8p5efh" path="res://Scenes/Managers/LevelManager.tscn" id="4_x8sv3"]
 
 [node name="Main" type="Node2D"]
 
-[node name="GameManager" parent="." node_paths=PackedStringArray("gameContainer") instance=ExtResource("1_1k356")]
-gameContainer = NodePath("../GameContainer")
+[node name="Managers" type="Node2D" parent="."]
+
+[node name="GameManager" parent="Managers" node_paths=PackedStringArray("gameContainer") instance=ExtResource("1_1k356")]
+gameContainer = NodePath("../../GameContainer")
+
+[node name="InputManager" parent="Managers" instance=ExtResource("2_xwyp1")]
+
+[node name="UIManager" parent="Managers" node_paths=PackedStringArray("uiContainer", "MenusContainer") instance=ExtResource("3_w8xrj")]
+uiContainer = NodePath("../../UI")
+MenusContainer = NodePath("../../UI/Menus")
+
+[node name="LevelManager" parent="Managers" node_paths=PackedStringArray("gameContainer") instance=ExtResource("4_x8sv3")]
+gameContainer = NodePath("../../GameContainer")
 
 [node name="GameContainer" type="Node2D" parent="."]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Menus" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -72,8 +72,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private void AnimationFinished()
 		{
-			SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.GoToMainMenu);
-			QueueFree();
+			CustomSignals.GoToMainMenu?.Invoke();
 		}
 
 		// ----- Destructor ----- \\

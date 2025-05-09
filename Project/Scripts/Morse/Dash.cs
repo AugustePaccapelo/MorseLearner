@@ -45,7 +45,7 @@ namespace Com.IsartDigital.OBG.Morse
         {
             Tween lTween = CreateTween();
             lTween.TweenProperty(this, TweenProperties.SCALE, endScale, spawnDuration * 0.5f).From(startScale);
-            lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter, this);
+            lTween.Finished += () => CustomSignals.NewCharacter?.Invoke(this);
             lTween.Play();
         }
 
@@ -58,7 +58,7 @@ namespace Com.IsartDigital.OBG.Morse
 
         public override void BrokenAnimation()
         {
-            GetTree().CreateTimer(0.2).Timeout += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
+            GetTree().CreateTimer(0.2).Timeout += () => CustomSignals.ErrorInCode?.Invoke();
         }
 
         // ----- Destructor ----- \\

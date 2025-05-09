@@ -1,39 +1,26 @@
 using System.Collections.Generic;
 using System.Linq;
-using Com.IsartDigital.OBG.managers;
 using Com.IsartDigital.OBG.Morse;
 using Com.IsartDigital.OBG.UI;
-using Com.IsartDigital.OBG.UI.Menus;
 using Com.IsartDigital.OBG.Utils;
+using Com.IsartDigital.OBG.UI.Menus;
 using Godot;
 
 // Author : Auguste Paccapelo
 
 namespace Com.IsartDigital.OBG.Managers
 {
-	public partial class LevelManager : Node2D
+	public partial class LevelManager : Manager
 	{
 		// ---------- VARIABLES ---------- \\
-
-		#region // ----- Singleton ----- \\
-		static private LevelManager instance;
-
-		static public LevelManager GetInstance()
-		{
-			if (instance == null) instance = new LevelManager();
-			return instance;
-
-		}
-        #endregion
 
         // ----- Paths ----- \\
         [Export] private PackedScene DotScene;
         [Export] private PackedScene DashScene;
 
         // ----- Nodes ----- \\
-        private SignalsManager signalsManager;
 		public HUD hud;
-        private Node2D gameContainer;
+        [Export] private Node2D gameContainer;
         public Control startMorseCodePos;
 
         // ----- Others ----- \\
@@ -54,40 +41,22 @@ namespace Com.IsartDigital.OBG.Managers
 
         // ---------- FUNCTIONS ---------- \\
 
-        // ----- Constructor & Ready & Process ----- \\
+        // ----- Init & Process ----- \\
 
-        private LevelManager() : base() { }
+        public override void Init()
+        {
+            rand.Randomize();
 
-		public override void _Ready()
-		{
-			#region Singleton Ready
-			if (instance != null)
-			{
-				QueueFree();
-				GD.Print(nameof(LevelManager) + " Instance already exist, destroying the last added.");
-				return;
-			}
+            CustomSignals.InputClick += InputClick;
+            CustomSignals.InputStartHold += InputStartHold;
+            CustomSignals.InputStopHold += InputStopHold;
+            CustomSignals.NewCharacter += NewCharacter;
+            CustomSignals.ErrorInCode += WrongCharacter;
 
-			instance = this;
-			#endregion
-
-			base._Ready();
-
-			rand.Randomize();
-
-			signalsManager = SignalsManager.GetInstance();
-			signalsManager.InputClick += InputClick;
-			signalsManager.InputStartHold += InputStartHold;
-			signalsManager.InputStopHold += InputStopHold;
-			
-			signalsManager.NewCharacter += NewCharacter;
-			signalsManager.WrongCharacter += WrongCharacter;
-
-			allLetters = MorseCode.alphabet.Keys.ToArray();
-            gameContainer = GameManager.GetInstance().gameContainer;
+            allLetters = MorseCode.alphabet.Keys.ToArray();
         }
 
-		public override void _Process(double pDelta)
+        public override void _Process(double pDelta)
 		{
 			float lDelta = (float)pDelta;
 
@@ -235,19 +204,13 @@ namespace Com.IsartDigital.OBG.Managers
 
 		protected override void Dispose(bool pDisposing)
 		{
-			#region Singleton Dispose
-			if (pDisposing && instance == this) instance = null;
-			#endregion
-
 			base.Dispose(pDisposing);
 
-            signalsManager.InputClick -= InputClick;
-            signalsManager.InputStartHold -= InputStartHold;
-            signalsManager.InputStopHold -= InputStopHold;
-            signalsManager.PlayButtonPressed -= StartGame;
-
-            signalsManager.NewCharacter -= NewCharacter;
-            signalsManager.WrongCharacter -= WrongCharacter;
+            CustomSignals.InputClick -= InputClick;
+            CustomSignals.InputStartHold -= InputStartHold;
+            CustomSignals.InputStopHold -= InputStopHold;
+            CustomSignals.NewCharacter -= NewCharacter;
+            CustomSignals.ErrorInCode -= WrongCharacter;
         }
 	}
 }

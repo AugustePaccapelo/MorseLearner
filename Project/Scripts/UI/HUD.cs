@@ -57,8 +57,9 @@ namespace Com.IsartDigital.OBG.UI
 
 			base._Ready();
 
-			LevelManager.GetInstance().hud = this;
-			LevelManager.GetInstance().startMorseCodePos = startMorseCodePos;
+			LevelManager lLevelManager = Manager.GetManager<LevelManager>();
+            lLevelManager.hud = this;
+            lLevelManager.startMorseCodePos = startMorseCodePos;
 		}
 
 		public override void _Process(double pDelta)

@@ -54,7 +54,7 @@ namespace Com.IsartDigital.OBG.Morse
         {
 			Tween lTween = CreateTween();
 			lTween.TweenProperty(this, TweenProperties.SCALE, endScale, spawnDuration).From(startScale);
-			lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.NewCharacter, this);
+			lTween.Finished += () => CustomSignals.NewCharacter?.Invoke(this);
 			lTween.Play();
         }
 
@@ -72,7 +72,7 @@ namespace Com.IsartDigital.OBG.Morse
 			lTween.TweenProperty(leftBroken, TweenProperties.ROTATION, -lAngle, brokenStartAnimDuration);
             lTween.Parallel().TweenProperty(rightBroken, TweenProperties.ROTATION, lAngle, brokenStartAnimDuration);
 			lTween.Chain().TweenInterval(waitTimeForBrokenAnim);
-            lTween.Finished += () => SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.WrongCharacter);
+            lTween.Finished += () => CustomSignals.ErrorInCode?.Invoke();
         }
 
         // ----- Destructor ----- \\

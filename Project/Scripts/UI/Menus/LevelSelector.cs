@@ -1,10 +1,10 @@
-using Com.IsartDigital.OBG.managers;
-using Com.IsartDigital.OBG.UI.Menus;
+using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 
 // Author : Auguste Paccapelo
 
-namespace Com.IsartDigital.OBG.Managers
+namespace Com.IsartDigital.OBG.UI.Menus
 {
 	public partial class LevelSelector : Control
 	{
@@ -73,11 +73,11 @@ namespace Com.IsartDigital.OBG.Managers
 			{
 				HelpScreen lHelp = helpScreenScene.Instantiate<HelpScreen>();
 				lHelp.numLettersKnown = numLettersKnown;
-				UIManager.GetInstance().AddChild(lHelp);
+				AddChild(lHelp);
 			}
 			else
 			{
-				SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.LaunchGame, pDifficulty);
+				CustomSignals.GoToInGame?.Invoke(pDifficulty);
 			}
 		}
 

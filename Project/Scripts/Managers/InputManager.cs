@@ -1,31 +1,17 @@
-using System.Transactions;
-using Com.IsartDigital.OBG.Managers;
-using Com.IsartDigital.OBG.UI;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 
 // Author : Auguste Paccapelo
 
-namespace Com.IsartDigital.OBG.managers
+namespace Com.IsartDigital.OBG.Managers
 {
-	public partial class InputManager : Node2D
+	public partial class InputManager : Manager
 	{
 		// ---------- VARIABLES ---------- \\
-
-		#region // ----- Singleton ----- \\
-		static private InputManager instance;
-
-		static public InputManager GetInstance()
-		{
-			if (instance == null) instance = new InputManager();
-			return instance;
-
-		}
-		#endregion
 
 		// ----- Paths ----- \\
 
 		// ----- Nodes ----- \\
-		private SignalsManager signalsManager;
 
 		// ----- Others ----- \\
 		public bool canPlay = false;
@@ -41,29 +27,14 @@ namespace Com.IsartDigital.OBG.managers
 
         // ---------- FUNCTIONS ---------- \\
 
-        // ----- Constructor & Ready & Process ----- \\
+        // ----- Init & Process ----- \\
 
-        private InputManager() : base() { }
+        public override void Init()
+        {
+            
+        }
 
-		public override void _Ready()
-		{
-			#region Singleton Ready
-			if (instance != null)
-			{
-				QueueFree();
-				GD.Print(nameof(InputManager) + " Instance already exist, destroying the last added.");
-				return;
-			}
-
-			instance = this;
-			#endregion
-
-			base._Ready();
-
-			signalsManager = SignalsManager.GetInstance();
-		}
-
-		public override void _Process(double pDelta)
+        public override void _Process(double pDelta)
 		{
 			float lDelta = (float)pDelta;
 
@@ -74,7 +45,7 @@ namespace Com.IsartDigital.OBG.managers
 				currentPressedTime += lDelta;
 				if (!isHolding && currentPressedTime > unitTime * DOT_UNIT + timeErrorMargin)
 				{
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputStartHold);
+					CustomSignals.InputStartHold?.Invoke();
 					isHolding = true;
                 }
 				if (!wasPressing) wasPressing = true;
@@ -83,11 +54,11 @@ namespace Com.IsartDigital.OBG.managers
 			{
 				if (currentPressedTime <= unitTime * DOT_UNIT + timeErrorMargin)
 				{
-					signalsManager.EmitSignal(SignalsManager.SignalName.InputClick);
+                    CustomSignals.InputClick?.Invoke();
 				}
 				else if (isHolding)
 				{
-                    signalsManager.EmitSignal(SignalsManager.SignalName.InputStopHold);
+                    CustomSignals.InputStopHold?.Invoke();
                     isHolding = false;
                 }
 				currentPressedTime = 0f;
@@ -105,12 +76,12 @@ namespace Com.IsartDigital.OBG.managers
 			if (IsPressedEvent(pEvent) && !isPressing)
 			{
                 isPressing = true;
-                signalsManager.EmitSignal(SignalsManager.SignalName.InputPressed);
+                CustomSignals.InputPressed?.Invoke();
             }
 			else if (IsReleasedEvent(pEvent) && isPressing)
 			{
                 isPressing = false;
-                signalsManager.EmitSignal(SignalsManager.SignalName.InputReleased);
+                CustomSignals.InputReleased?.Invoke();
             }
         }
 
@@ -144,10 +115,6 @@ namespace Com.IsartDigital.OBG.managers
 
         protected override void Dispose(bool pDisposing)
 		{
-			#region Singleton Dispose
-			if (pDisposing && instance == this) instance = null;
-			#endregion
-
 			base.Dispose(pDisposing);
 		}
 	}

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cpgmp6yltnprf"]
 
-[ext_resource type="Script" path="res://Scripts/Managers/LevelSelector.cs" id="1_8sjvv"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/LevelSelector.cs" id="1_338da"]
 [ext_resource type="PackedScene" uid="uid://bxmelcxyghkh3" path="res://Scenes/UI/Menus/HelpScreen.tscn" id="2_038nx"]
 
 [node name="LevelSelector" type="Control" node_paths=PackedStringArray("learningButton", "easyButton", "normalButton", "hardButton", "hardcoreButton")]
@@ -10,7 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_8sjvv")
+script = ExtResource("1_338da")
 helpScreenScene = ExtResource("2_038nx")
 learningButton = NodePath("VBoxContainer/Learning")
 easyButton = NodePath("VBoxContainer/Easy")

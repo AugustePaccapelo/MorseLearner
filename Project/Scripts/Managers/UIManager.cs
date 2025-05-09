@@ -1,27 +1,15 @@
-using Com.IsartDigital.OBG.Managers;
 using Com.IsartDigital.OBG.UI.Menus;
 using Com.IsartDigital.OBG.UI;
 using Godot;
+using Com.IsartDigital.OBG.Utils;
 
 // Author : Auguste Paccapelo
 
-namespace Com.IsartDigital.OBG.managers
+namespace Com.IsartDigital.OBG.Managers
 {
-	public partial class UIManager : Control
+	public partial class UIManager : Manager
 	{
         // ---------- VARIABLES ---------- \\
-
-        #region // ----- Singleton ----- \\
-        static private UIManager instance;
-
-        static public UIManager GetInstance()
-        {
-            if (instance == null) instance = new UIManager();
-            return instance;
-
-        }
-        #endregion
-
 
         // ----- Paths ----- \\
         [Export] private PackedScene titleCardScene;
@@ -30,46 +18,29 @@ namespace Com.IsartDigital.OBG.managers
 		[Export] private PackedScene hudScene;
 
 		// ----- Nodes ----- \\
-		private SignalsManager signalsManager;
+		[Export] private Control uiContainer;
+		[Export] private Control MenusContainer;
 
 		// ----- Others ----- \\
 		private Vector2 screenSize;
 
 		// ---------- FUNCTIONS ---------- \\
 
-		// ----- Constructor & Ready & Process ----- \\
+		// ----- Init & Process ----- \\
 
-		private UIManager() : base() { }
+        public override void Init()
+        {
+            screenSize = GetViewportRect().Size;
+			uiContainer.Size = screenSize;
+            //Position = screenSize * 0.5f;
 
-		public override void _Ready()
-		{
-            #region Singleton Ready
-            if (instance != null)
-            {
-                QueueFree();
-                GD.Print(nameof(UIManager) + " Instance already exist, destroying the last added.");
-                return;
-            }
+			CustomSignals.GoToTitleCard += GoToTitleCard;
+			CustomSignals.GoToMainMenu += GoToMainMenu;
+			CustomSignals.GoToLevelSelector += GoToLevelSelector;
+			CustomSignals.GoToInGame += LaunchGame;   
+        }
 
-            instance = this;
-            #endregion
-
-
-            base._Ready();
-
-			screenSize = GameManager.GetInstance().screenSize;
-			CustomMinimumSize = screenSize;
-			Position = screenSize * 0.5f;
-
-			signalsManager = SignalsManager.GetInstance();
-			signalsManager.GoToMainMenu += GoToMainMenu;
-			signalsManager.GoToLevelSelector += GoToLevelSelector;
-			signalsManager.LaunchGame += LaunchGame;
-
-			AddChild(titleCardScene.Instantiate());
-		}
-
-		public override void _Process(double pDelta)
+        public override void _Process(double pDelta)
 		{
 			float lDelta = (float)pDelta;
 
@@ -78,39 +49,48 @@ namespace Com.IsartDigital.OBG.managers
 
 		// ----- My Functions ----- \\
 
+		private void ClearClhilds(Node pNode)
+		{
+			foreach (Node lChild in pNode.GetChildren()) lChild.QueueFree();
+		}
+
+		private void GoToTitleCard()
+		{
+            ClearClhilds(MenusContainer);
+            MenusContainer.AddChild(titleCardScene.Instantiate());
+        }
+
 		private void GoToMainMenu()
 		{
-			MainMenu lMainMenu = mainMenuScene.Instantiate<MainMenu>();
-			AddChild(lMainMenu);
+            ClearClhilds(MenusContainer);
+            MainMenu lMainMenu = mainMenuScene.Instantiate<MainMenu>();
+            MenusContainer.AddChild(lMainMenu);
 		}
 
 		private void GoToLevelSelector()
 		{
-            MainMenu.GetInstance().QueueFree();
+			ClearClhilds(MenusContainer);
             LevelSelector lLevelSelector = levelSelectorScene.Instantiate<LevelSelector>();
-			AddChild(lLevelSelector);
+            MenusContainer.AddChild(lLevelSelector);
 		}
 
 		private void LaunchGame(int pDifficulty)
 		{
-			LevelSelector.GetInstance().QueueFree();
-			AddChild(hudScene.Instantiate<HUD>());
-			LevelManager.GetInstance().StartGame(pDifficulty);
+            ClearClhilds(MenusContainer);
+            MenusContainer.AddChild(hudScene.Instantiate<HUD>());
+			GetManager<LevelManager>().StartGame(pDifficulty);
 		}
 
 		// ----- Destructor ----- \\
 
 		protected override void Dispose(bool pDisposing)
 		{
-            #region Singleton Dispose
-            if (pDisposing && instance == this) instance = null;
-            #endregion
-
             base.Dispose(pDisposing);
 
-            signalsManager.GoToMainMenu -= GoToMainMenu;
-            signalsManager.GoToLevelSelector -= GoToLevelSelector;
-            signalsManager.PlayButtonPressed -= LaunchGame;
+            CustomSignals.GoToTitleCard -= GoToTitleCard;
+            CustomSignals.GoToMainMenu -= GoToMainMenu;
+            CustomSignals.GoToLevelSelector -= GoToLevelSelector;
+            CustomSignals.GoToInGame -= LaunchGame;
         }
 	}
 }

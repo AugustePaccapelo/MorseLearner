@@ -6,16 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://cpgmp6yltnprf" path="res://Scenes/UI/Menus/LevelSelector.tscn" id="4_87ysm"]
 [ext_resource type="PackedScene" uid="uid://f4yxolbl45o3" path="res://Scenes/UI/HUD/HUD.tscn" id="4_x64ht"]
 
-[node name="UIManager" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
+[node name="UIManager" type="Node2D"]
 script = ExtResource("1_vokvb")
 titleCardScene = ExtResource("2_g5khm")
 mainMenuScene = ExtResource("3_iwsjp")
 levelSelectorScene = ExtResource("4_87ysm")
 hudScene = ExtResource("4_x64ht")
+
+[node name="Menus" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

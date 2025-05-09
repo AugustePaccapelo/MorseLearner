@@ -1,37 +1,19 @@
-using Com.IsartDigital.OBG.managers;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 
 // Author : Auguste Paccapelo
 
 namespace Com.IsartDigital.OBG.Managers
 {
-	public partial class GameManager : Node2D
+	public partial class GameManager : Manager
 	{
-        // ---------- VARIABLES ---------- \\
-
-        #region // ----- Singleton ----- \\
-        static private GameManager instance;
-
-        static public GameManager GetInstance()
-        {
-            if (instance == null) instance = new GameManager();
-            return instance;
-
-        }
-		#endregion
-
+		// ---------- VARIABLES ---------- \\
 
 		// ----- Paths ----- \\
-		[Export] private PackedScene inputManagerScene;
-		[Export] private PackedScene levelManagerScene;
-        [Export] private PackedScene uiManagerScene;
 
 		// ----- Nodes ----- \\
-		[Export] public Node2D gameContainer { get; private set; }
-		private SignalsManager signalsManager;
+		[Export] private Node2D gameContainer;
 		private InputManager inputManager;
-		private LevelManager levelManager;
-		private UIManager uiManager;
 
 		// ----- Others ----- \\
 		public Vector2 screenSize { get; private set; }
@@ -40,29 +22,14 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- Constructor & Ready & Process ----- \\
 
-		private GameManager() : base() { }
+        public override void Init()
+        {
+            screenSize = GetViewportRect().Size;
 
-		public override void _Ready()
-		{
-            #region Singleton Ready
-            if (instance != null)
-            {
-                QueueFree();
-                GD.Print(nameof(GameManager) + " Instance already exist, destroying the last added.");
-                return;
-            }
+			allManagersFinished += GetAllManagers;
+        }
 
-            instance = this;
-            #endregion
-
-            base._Ready();
-
-			screenSize = GetViewportRect().Size;
-
-			CreateAllManagers();
-		}
-
-		public override void _Process(double pDelta)
+        public override void _Process(double pDelta)
 		{
 			float lDelta = (float)pDelta;
 
@@ -71,20 +38,14 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- My Functions ----- \\
 
-		private void CreateAllManagers()
+		private void GetAllManagers()
 		{
-			signalsManager = SignalsManager.GetInstance();
-			signalsManager.PlayButtonPressed += (pDifficulty) => PlayPressed();
+			CustomSignals.GoToInGame += (pDifficulty) => PlayPressed();
 
-			inputManager = inputManagerScene.Instantiate<InputManager>();
-			AddChild(inputManager);
+			inputManager = GetManager<InputManager>();
 
-			uiManager = uiManagerScene.Instantiate<UIManager>();
-			AddChild(uiManager);
-
-			levelManager = levelManagerScene.Instantiate<LevelManager>();
-			AddChild(levelManager);
-		}
+            CustomSignals.GoToTitleCard?.Invoke();
+        }
 
 		private void PlayPressed()
 		{
@@ -95,13 +56,9 @@ namespace Com.IsartDigital.OBG.Managers
 
 		protected override void Dispose(bool pDisposing)
 		{
-            #region Singleton Dispose
-            if (pDisposing && instance == this) instance = null;
-            #endregion
-
             base.Dispose(pDisposing);
 
-			signalsManager.PlayButtonPressed -= (pDifficulty) => PlayPressed();
-		}
+            CustomSignals.GoToInGame -= (pDifficulty) => PlayPressed();
+        }
 	}
 }

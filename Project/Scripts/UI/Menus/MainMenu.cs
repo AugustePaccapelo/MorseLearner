@@ -1,4 +1,5 @@
 using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.Utils;
 using Godot;
 
 // Author : Auguste Paccapelo
@@ -73,7 +74,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private void PlayFunction()
 		{
-            SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.GoToLevelSelector);
+            CustomSignals.GoToLevelSelector?.Invoke();
 		}
 
 		private void QuitFunction()

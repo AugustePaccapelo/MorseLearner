@@ -88,8 +88,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private void PlayButtonPressed()
 		{
-			SignalsManager.GetInstance().EmitSignal(SignalsManager.SignalName.LaunchGame, 0);
-			QueueFree();
+			CustomSignals.GoToInGame?.Invoke(0);
 		}
 
 		private void AddMorseCode(string pLetter, HBoxContainer pCont)
