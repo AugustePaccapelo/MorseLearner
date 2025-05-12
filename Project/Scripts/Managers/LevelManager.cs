@@ -98,7 +98,8 @@ namespace Com.IsartDigital.OBG.Managers
                 pCharac.GoodAnimation();
 				if (IsCodeFinished())
 				{
-					GetRandomLetter();
+                    HUD.GetInstance().LetterFinishedAnimation();
+					//GetRandomLetter();
 				}
 			}
 			else

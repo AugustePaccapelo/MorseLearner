@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://f4yxolbl45o3"]
+[gd_scene load_steps=6 format=3 uid="uid://f4yxolbl45o3"]
 
 [ext_resource type="Script" path="res://Scripts/UI/HUD.cs" id="1_pa478"]
 [ext_resource type="Texture2D" uid="uid://dq1h6jmssjh6w" path="res://Assets/Textures/UI/HUD/InGameHUD.png" id="2_ha3e6"]
@@ -6,10 +6,13 @@
 [sub_resource type="LabelSettings" id="LabelSettings_bcigg"]
 font_size = 128
 
+[sub_resource type="LabelSettings" id="LabelSettings_kn5n1"]
+font_size = 94
+
 [sub_resource type="LabelSettings" id="LabelSettings_cxe07"]
 font_size = 32
 
-[node name="HUD" type="Control" node_paths=PackedStringArray("currentLetterLabel", "confirmationLabel", "startMorseCodePos")]
+[node name="HUD" type="Control" node_paths=PackedStringArray("currentLetterLabel", "secondLetterLabel", "thirdLetterLabel", "confirmationLabel", "startMorseCodePos", "letterFinishAnimPos")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,8 +22,11 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_pa478")
 currentLetterLabel = NodePath("CurrentLetter")
+secondLetterLabel = NodePath("SecondLetter")
+thirdLetterLabel = NodePath("ThirdLetter")
 confirmationLabel = NodePath("Confirmation")
 startMorseCodePos = NodePath("StartMorseCodePos")
+letterFinishAnimPos = NodePath("LetterFinishAnimPos")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -44,11 +50,39 @@ offset_left = 0.220001
 offset_top = 0.480011
 offset_right = 0.019989
 offset_bottom = -0.0800171
-text = "A
-"
+pivot_offset = Vector2(75, 101)
+text = "A"
 label_settings = SubResource("LabelSettings_bcigg")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SecondLetter" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.235
+anchor_top = 0.323
+anchor_right = 0.376
+anchor_bottom = 0.46
+offset_left = 0.0999908
+offset_top = -0.0800171
+offset_right = -0.0400085
+offset_bottom = 0.399994
+text = "A"
+label_settings = SubResource("LabelSettings_kn5n1")
+
+[node name="ThirdLetter" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.094
+anchor_top = 0.324
+anchor_right = 0.235
+anchor_bottom = 0.461
+offset_left = 0.239998
+offset_top = -0.0400085
+offset_right = 0.0999908
+offset_bottom = 0.439972
+text = "A"
+label_settings = SubResource("LabelSettings_kn5n1")
 
 [node name="Confirmation" type="Label" parent="."]
 layout_mode = 1
@@ -72,3 +106,14 @@ anchor_right = 0.185
 anchor_bottom = 0.625
 offset_left = 0.0999985
 offset_right = 0.0999985
+
+[node name="LetterFinishAnimPos" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.407
+anchor_top = 0.042
+anchor_right = 0.407
+anchor_bottom = 0.042
+offset_left = 0.220001
+offset_top = -0.320004
+offset_right = 40.22
+offset_bottom = 39.68
