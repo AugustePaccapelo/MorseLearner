@@ -45,7 +45,9 @@ namespace Com.IsartDigital.OBG.UI
 		private float animFinishCurrentXMult;
 		private float animElapseTime;
 
-        // Spawn
+		// Spawn
+		private float transitionDuration = 1.5f;
+		private Vector2 currentLetterPos, secondLetterPos, thirdLetterPos;
 
         // ---------- FUNCTIONS ---------- \\
 
@@ -71,6 +73,10 @@ namespace Com.IsartDigital.OBG.UI
 			LevelManager lLevelManager = Manager.GetManager<LevelManager>();
             lLevelManager.hud = this;
             lLevelManager.startMorseCodePos = startMorseCodePos;
+
+			currentLetterPos = currentLetterLabel.GlobalPosition;
+			secondLetterPos = secondLetterLabel.GlobalPosition;
+			thirdLetterPos = thirdLetterLabel.GlobalPosition;
 		}
 
 		public override void _Process(double pDelta)
@@ -90,10 +96,8 @@ namespace Com.IsartDigital.OBG.UI
 				float lXScaleMult = Mathf.Cos(lProgress * Mathf.Pi);
 				Vector2 lScale = new Vector2(lScaleFac * lXScaleMult, lScaleFac);
 				currentLetterLabel.Scale = lScale;
-				GD.Print($"Time : {animElapseTime}, Progress : {lProgress}, lWeight : {lProgress % finishAnimDuration}, Scale : {lScaleFac}");
 				if (animElapseTime >= finishAnimDuration)
 				{
-					GD.Print("Finished");
 					isLetterTurning = false;
 				}
 			}
@@ -103,7 +107,16 @@ namespace Com.IsartDigital.OBG.UI
 
 		public void NewLetterAnimation()
 		{
+			currentLetterLabel.Text = "";
 
+			Tween lTween = CreateTween();
+
+			lTween.TweenProperty(secondLetterLabel, TweenProperties.GLOBAL_POSITION, currentLetterPos, transitionDuration)
+				.SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.InOut);
+            lTween.Parallel().TweenProperty(secondLetterLabel, TweenProperties.SCALE, new Vector2(1.75f, 1.75f), transitionDuration)
+                .SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.InOut);
+
+            lTween.Play();
 		}
 
 		public void LetterFinishedAnimation()
@@ -114,8 +127,9 @@ namespace Com.IsartDigital.OBG.UI
 
 			StartTurnAnimation();
 
-			//lTween.Finished += UpdateLetters;
-		}
+			lTween.Finished += NewLetterAnimation;
+            lTween.Play();
+        }
 
 		private void StartTurnAnimation()
 		{
@@ -123,7 +137,6 @@ namespace Com.IsartDigital.OBG.UI
 			animFinishCurrentXMult = 0;
             animElapseTime = 0;
 			animFinishTurnDuration = finishAnimDuration / numLetterTurn;
-			GD.Print(animFinishTurnDuration);
         }
 		
 		private void UpdateLetters()
