@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://6c8c8iecn3wf"]
+[gd_scene load_steps=7 format=3 uid="uid://6c8c8iecn3wf"]
 
 [ext_resource type="PackedScene" uid="uid://cxvx0rsm0ls5w" path="res://Scenes/Managers/GameManager.tscn" id="1_1k356"]
+[ext_resource type="PackedScene" uid="uid://b7imtf1eypiue" path="res://Scenes/GameObjects/Light2D.tscn" id="2_68v0x"]
 [ext_resource type="PackedScene" uid="uid://bk10molxe5ied" path="res://Scenes/Managers/InputManager.tscn" id="2_xwyp1"]
+[ext_resource type="PackedScene" uid="uid://c36shr3wlqw8k" path="res://Scenes/GameObjects/Particules.tscn" id="3_03qv1"]
 [ext_resource type="PackedScene" uid="uid://bdlfwj4cousro" path="res://Scenes/Managers/UIManager.tscn" id="3_w8xrj"]
 [ext_resource type="PackedScene" uid="uid://d3qpd1q8p5efh" path="res://Scenes/Managers/LevelManager.tscn" id="4_x8sv3"]
 
@@ -10,6 +12,8 @@
 [node name="Managers" type="Node2D" parent="."]
 
 [node name="GameManager" parent="Managers" node_paths=PackedStringArray("gameContainer") instance=ExtResource("1_1k356")]
+lightScene = ExtResource("2_68v0x")
+particuleScene = ExtResource("3_03qv1")
 gameContainer = NodePath("../../GameContainer")
 
 [node name="InputManager" parent="Managers" instance=ExtResource("2_xwyp1")]

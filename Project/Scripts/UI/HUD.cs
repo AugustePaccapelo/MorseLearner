@@ -96,27 +96,10 @@ namespace Com.IsartDigital.OBG.UI
 			if (isLetterTurning)
 			{
 				animElapseTime += lDelta;
-
-				//float lProgress = animElapseTime / animFinishTurnDuration;
+ 
 				float lProgress = animElapseTime / finishAnimDuration;
 
-				/*
-				 * finishAnimDuration = 1f
-				 * tPerTurn = finishAnimDuration / numTurn
-				 *  = 1 / 4 = 0.25f
-				 * 
-				 * 
-				 * 
-				 * 0 => 0
-				 * 
-				 * 
-				 * 
-				 * finishAnimDuration => 1
-				 */
-
 				float lScaleFac = Mathf.Lerp(letterFinishStartScale, letterFinishMaxScale, lProgress);
-
-				GD.Print(lProgress);
 
 				float lXScaleMult = Mathf.Cos(lProgress * turnSpeed * Mathf.Pi);
 				Vector2 lScale = new Vector2(lScaleFac * lXScaleMult, lScaleFac);
@@ -132,7 +115,8 @@ namespace Com.IsartDigital.OBG.UI
 
 		public void NewLetterAnimation()
 		{
-			currentLetterLabel.Text = "";
+            Manager.GetManager<GameManager>().StopLight();
+            currentLetterLabel.Text = "";
 
 			Tween lTween = CreateTween();
 
@@ -155,6 +139,8 @@ namespace Com.IsartDigital.OBG.UI
 
 		public void LetterFinishedAnimation()
 		{
+			Manager.GetManager<GameManager>().StartLight(currentLetterLabel);
+
 			Tween lTween = CreateTween();
 
 			lTween.TweenProperty(currentLetterLabel, TweenProperties.GLOBAL_POSITION, letterFinishAnimPos.GlobalPosition, finishAnimDuration);
@@ -183,9 +169,6 @@ namespace Com.IsartDigital.OBG.UI
 		private void UpdateLetters()
 		{
 			Manager.GetManager<LevelManager>().NewLetter();
-
-			/*currentLetterLabel.Text = secondLetterLabel.Text;
-			secondLetterLabel.Text = thirdLetterLabel.Text;*/
 
 			currentLetterLabel.Position = currentLetterPos;
 			secondLetterLabel.Position = secondLetterPos;

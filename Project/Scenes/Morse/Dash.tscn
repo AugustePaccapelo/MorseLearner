@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://dab201ag8vxjg"]
+[gd_scene load_steps=6 format=3 uid="uid://dab201ag8vxjg"]
 
 [ext_resource type="Script" path="res://Scripts/Morse/Dash.cs" id="1_wanly"]
 [ext_resource type="Texture2D" uid="uid://dh37bjpjn2aug" path="res://Assets/Textures/Morse/GoodDash.png" id="2_hw040"]
+[ext_resource type="PackedScene" uid="uid://c36shr3wlqw8k" path="res://Scenes/GameObjects/Particules.tscn" id="2_t7o4f"]
 [ext_resource type="Texture2D" uid="uid://dic4awpbx5j0g" path="res://Assets/Textures/Morse/BrokenDashLeft.png" id="3_yfqti"]
 [ext_resource type="Texture2D" uid="uid://b0brgfgfu8n2l" path="res://Assets/Textures/Morse/BrokenDashRight.png" id="4_m5afo"]
 
 [node name="Dash" type="Node2D" node_paths=PackedStringArray("defaultSprite", "renderer", "goodVisual", "brokenVisual", "leftBroken", "rightBroken")]
 script = ExtResource("1_wanly")
+particuleScene = ExtResource("2_t7o4f")
 defaultSprite = NodePath("Renderer/Good/Sprite2D")
 renderer = NodePath("Renderer")
 goodVisual = NodePath("Renderer/Good")

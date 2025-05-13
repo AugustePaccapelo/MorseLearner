@@ -62,6 +62,10 @@ namespace Com.IsartDigital.OBG.Morse
 		{
 			Tween lTween = CreateTween();
             lTween.TweenProperty(this, TweenProperties.SCALE, Vector2.One, goodAnimDuration).From(endScale);
+			CpuParticles2D lParticule = particuleScene.Instantiate<CpuParticles2D>();
+			AddChild(lParticule);
+			lParticule.Scale *= 0.5f;
+			lParticule.Emitting = true;
 			lTween.Play();
         }
 

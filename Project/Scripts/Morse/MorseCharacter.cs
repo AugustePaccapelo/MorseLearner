@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Runtime.CompilerServices;
 
 // Author : Auguste Paccapelo
 
@@ -10,6 +11,7 @@ namespace Com.IsartDigital.OBG.Morse
 		// ---------- VARIABLES ---------- \\
 
 		// ----- Paths ----- \\
+		[Export] protected PackedScene particuleScene;
 
         // ----- Nodes ----- \\
         [Export] public Sprite2D defaultSprite { get; private set; }
