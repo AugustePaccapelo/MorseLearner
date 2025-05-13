@@ -185,6 +185,7 @@ namespace Com.IsartDigital.OBG.Managers
         private Vector2 GetLastPosition(MorseCharacter pMorse)
         {
             Vector2 lPos = startMorseCodePos.GlobalPosition;
+
             if (allMorseCharacters.Count > 0)
             {
                 MorseCharacter lLast = allMorseCharacters.Last();

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using Com.IsartDigital.OBG.Managers;
@@ -25,7 +26,7 @@ namespace Com.IsartDigital.OBG.UI
 
 		// ----- Paths ----- \\
 
-        // ----- Nodes ----- \\
+		// ----- Nodes ----- \\
 		[Export] private Label currentLetterLabel, secondLetterLabel, thirdLetterLabel;
 		[Export] private Label confirmationLabel;
         [Export] public Control startMorseCodePos { get; private set; }
@@ -81,7 +82,7 @@ namespace Com.IsartDigital.OBG.UI
             lLevelManager.hud = this;
             lLevelManager.startMorseCodePos = startMorseCodePos;
 
-			currentLetterPos = currentLetterLabel.Position;
+            currentLetterPos = currentLetterLabel.Position;
 			secondLetterPos = secondLetterLabel.Position;
 			thirdLetterPos = thirdLetterLabel.Position;
 			waitingLettersBaseScale = secondLetterLabel.Scale;
@@ -204,11 +205,11 @@ namespace Com.IsartDigital.OBG.UI
 
 		protected override void Dispose(bool pDisposing)
 		{
-			#region Singleton Dispose
-			if (pDisposing && instance == this) instance = null;
-			#endregion
+            #region Singleton Dispose
+            if (pDisposing && instance == this) instance = null;
+            #endregion
 
-			base.Dispose(pDisposing);
-		}
+            base.Dispose(pDisposing);
+        }
 	}
 }

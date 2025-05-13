@@ -33,6 +33,7 @@ namespace Com.IsartDigital.OBG.Managers
             screenSize = GetViewportRect().Size;
 
 			allManagersFinished += GetAllManagers;
+			CustomSignals.GoToMainMenu += GoToMainMenu;
         }
 
         public override void _Process(double pDelta)
@@ -70,7 +71,6 @@ namespace Com.IsartDigital.OBG.Managers
 			currentLight = lightScene.Instantiate<PointLight2D>();
 			gameContainer.AddChild(currentLight);
 			nodeToFollow = pNodeToFollow;
-			GD.Print(nodeToFollow);
         }
 
 		public void StopLight()
@@ -85,6 +85,20 @@ namespace Com.IsartDigital.OBG.Managers
 			nodeToFollow = null;
 		}
 
+		private void GoToMainMenu()
+		{
+			GetManager<InputManager>().canPlay = false;
+			ClearGameContainer();
+		}
+
+		private void ClearGameContainer()
+		{
+			for (int i = gameContainer.GetChildCount() - 1; i > -1; i--)
+			{
+				gameContainer.GetChild(i).QueueFree();
+			}
+		}
+
 		// ----- Destructor ----- \\
 
 		protected override void Dispose(bool pDisposing)
@@ -92,6 +106,7 @@ namespace Com.IsartDigital.OBG.Managers
             base.Dispose(pDisposing);
 
             CustomSignals.GoToInGame -= (pDifficulty) => PlayPressed();
+            CustomSignals.GoToMainMenu -= GoToMainMenu;
         }
 	}
 }
