@@ -21,8 +21,6 @@ MenusContainer = NodePath("../../UI/Menus")
 [node name="LevelManager" parent="Managers" node_paths=PackedStringArray("gameContainer") instance=ExtResource("4_x8sv3")]
 gameContainer = NodePath("../../GameContainer")
 
-[node name="GameContainer" type="Node2D" parent="."]
-
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -36,3 +34,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="GameContainer" type="Node2D" parent="."]

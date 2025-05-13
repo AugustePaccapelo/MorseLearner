@@ -7,7 +7,7 @@
 font_size = 128
 
 [sub_resource type="LabelSettings" id="LabelSettings_kn5n1"]
-font_size = 94
+font_size = 128
 
 [sub_resource type="LabelSettings" id="LabelSettings_cxe07"]
 font_size = 32
@@ -28,6 +28,15 @@ confirmationLabel = NodePath("Confirmation")
 startMorseCodePos = NodePath("StartMorseCodePos")
 letterFinishAnimPos = NodePath("LetterFinishAnimPos")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.333832, 0.225613, 0, 1)
+
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -42,15 +51,15 @@ expand_mode = 1
 [node name="CurrentLetter" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.407
-anchor_top = 0.287
-anchor_right = 0.687
-anchor_bottom = 0.498
-offset_left = 0.220001
-offset_top = 0.480011
-offset_right = 0.019989
-offset_bottom = -0.0800171
-pivot_offset = Vector2(75, 101)
+anchor_left = 0.47
+anchor_top = 0.301
+anchor_right = 0.628
+anchor_bottom = 0.483
+offset_left = 0.199982
+offset_top = 0.039978
+offset_right = -0.120026
+offset_bottom = 0.319977
+pivot_offset = Vector2(41, 87)
 text = "A"
 label_settings = SubResource("LabelSettings_bcigg")
 horizontal_alignment = 1
@@ -59,28 +68,32 @@ vertical_alignment = 1
 [node name="SecondLetter" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.235
-anchor_top = 0.323
-anchor_right = 0.376
-anchor_bottom = 0.46
-offset_left = 0.0999908
-offset_top = -0.0800171
-offset_right = -0.0400085
-offset_bottom = 0.399994
+anchor_left = 0.256
+anchor_top = 0.345
+anchor_right = 0.335
+anchor_bottom = 0.436
+offset_left = -20.24
+offset_top = -43.2
+offset_right = 22.1001
+offset_bottom = 44.44
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(41, 87)
 text = "A"
 label_settings = SubResource("LabelSettings_kn5n1")
 
 [node name="ThirdLetter" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.094
-anchor_top = 0.324
-anchor_right = 0.235
-anchor_bottom = 0.461
-offset_left = 0.239998
-offset_top = -0.0400085
-offset_right = 0.0999908
-offset_bottom = 0.439972
+anchor_left = 0.116
+anchor_top = 0.347
+anchor_right = 0.194
+anchor_bottom = 0.439
+offset_left = -20.64
+offset_top = -43.12
+offset_right = 22.24
+offset_bottom = 43.56
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(41, 87)
 text = "A"
 label_settings = SubResource("LabelSettings_kn5n1")
 
@@ -109,11 +122,11 @@ offset_right = 0.0999985
 
 [node name="LetterFinishAnimPos" type="Control" parent="."]
 layout_mode = 1
-anchor_left = 0.407
+anchor_left = 0.47
 anchor_top = 0.042
-anchor_right = 0.407
+anchor_right = 0.47
 anchor_bottom = 0.042
-offset_left = 0.220001
+offset_left = 0.199982
 offset_top = -0.320004
-offset_right = 40.22
+offset_right = 40.2
 offset_bottom = 39.68

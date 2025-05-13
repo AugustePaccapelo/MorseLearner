@@ -29,8 +29,10 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private string[] allLetters;
 
-		private string currentLetter;
-		private string currentLetterMorseCode;
+		public string currentLetter { get; private set; }
+        public string secondLetter { get; private set; }
+        public string thirdLetter { get; private set; }
+        private string currentLetterMorseCode;
 		private string currentMorseCode;
 		private bool wasWrong = false;
 		private bool isCurrentlyWrong = false;
@@ -71,19 +73,34 @@ namespace Com.IsartDigital.OBG.Managers
 			{
 				allLetters = allLetters.Take(LevelSelector.numLettersKnown).ToArray();
 			}
-			GetRandomLetter();
+            //GetRandomLetter();
+
+            thirdLetter = GetRandomLetter();
+            secondLetter = GetRandomLetter();
+
+            NewLetter();
 		}
 
-		private void GetRandomLetter()
+		private string GetRandomLetter()
 		{
 			int lLength = allLetters.Length;
 			int lIndex = rand.RandiRange(0, lLength - 1);
-			string lCurrentLetter = allLetters[lIndex];
-			string lCurrentMorseCode = MorseCode.alphabet[lCurrentLetter];
-			currentLetter = lCurrentLetter;
-			currentLetterMorseCode = lCurrentMorseCode;
+            
+            return allLetters[lIndex];
+        }
+
+        public void NewLetter()
+        {
+            currentLetter = secondLetter;
+            secondLetter = thirdLetter;
+            thirdLetter = GetRandomLetter();
+
+            string lCurrentMorseCode = MorseCode.alphabet[currentLetter];
+            currentLetterMorseCode = lCurrentMorseCode;
+            
             ClearMorseCode();
-            hud.UpdateLetter(currentLetter);
+
+            hud.UpdateLetter(currentLetter, secondLetter, thirdLetter);
         }
 
 		public void NewCharacter(MorseCharacter pCharac)
@@ -99,7 +116,7 @@ namespace Com.IsartDigital.OBG.Managers
 				if (IsCodeFinished())
 				{
                     HUD.GetInstance().LetterFinishedAnimation();
-					//GetRandomLetter();
+                    GetManager<InputManager>().canPlay = false;
 				}
 			}
 			else
