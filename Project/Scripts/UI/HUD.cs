@@ -40,23 +40,23 @@ namespace Com.IsartDigital.OBG.UI
 		// ----- Animations ----- \\
 		// Finish
 		private bool isLetterTurning = false;
-		private float finishAnimDuration = 1f;
-		private float letterFinishStartScale = 1;
+		private float finishAnimDuration = 0.75f;
+		private float letterFinishStartScale = 1f;
 		private float letterFinishMaxScale = 1.75f;
 		private float finishEndAnimationScaleMult = 1.25f;
-		private float finishEndAnimationDuration = 0.5f;
+		private float finishEndAnimationDuration = 0.4f;
 		[Export] private Control letterFinishAnimPos;
 
-		private int numLetterTurn = 4;
-		private float turnSpeed;
+		private float numLetterTurn = 2;
+		private float turnTotalAngle;
 		private float animFinishTurnDuration;
 		private float animFinishCurrentXMult;
 		private float animElapseTime;
 
 		// Spawn
-		private float transitionDuration = 1.5f;
-		private float transitionDelay = 0.15f;
-		private float thirdLetterSpawnDuration = 0.5f;
+		private float transitionDuration = 1f;
+		private float transitionDelay = 0.1f;
+		private float thirdLetterSpawnDuration = 0.4f;
 		private Vector2 currentLetterPos, secondLetterPos, thirdLetterPos;
 		private Vector2 waitingLettersBaseScale;
 
@@ -109,7 +109,8 @@ namespace Com.IsartDigital.OBG.UI
 
 				float lScaleFac = Mathf.Lerp(letterFinishStartScale, letterFinishMaxScale, lProgress);
 
-				float lXScaleMult = Mathf.Cos(lProgress * turnSpeed * Mathf.Pi);
+				float lXScaleMult = Mathf.Cos(turnTotalAngle * lProgress);
+
 				Vector2 lScale = new Vector2(lScaleFac * lXScaleMult, lScaleFac);
 				currentLetterLabel.Scale = lScale;
 				if (animElapseTime >= finishAnimDuration)
@@ -177,14 +178,14 @@ namespace Com.IsartDigital.OBG.UI
 			animFinishCurrentXMult = 0;
             animElapseTime = 0;
 			animFinishTurnDuration = finishAnimDuration / numLetterTurn;
-            turnSpeed = numLetterTurn / finishAnimDuration;
+            turnTotalAngle = numLetterTurn * Mathf.Pi * 2;
         }
 		
 		private void UpdateLetters()
 		{
-			Manager.GetManager<LevelManager>().NewLetter();
+            Manager.GetManager<LevelManager>().NewLetter();
 
-			currentLetterLabel.Position = currentLetterPos;
+            currentLetterLabel.Position = currentLetterPos;
 			secondLetterLabel.Position = secondLetterPos;
 			thirdLetterLabel.Position = thirdLetterPos;
 			thirdLetterLabel.Scale = Vector2.Zero;
@@ -197,10 +198,16 @@ namespace Com.IsartDigital.OBG.UI
 			lTween.TweenProperty(thirdLetterLabel, TweenProperties.SCALE, waitingLettersBaseScale, thirdLetterSpawnDuration)
 				.SetTrans(Tween.TransitionType.Elastic).SetEase(Tween.EaseType.Out);
 
-			lTween.Finished += () => Manager.GetManager<InputManager>().canPlay = true;
+			lTween.Finished += AnimationFinished;
 
 			lTween.Play();
 		}
+
+		private void AnimationFinished()
+		{
+            Manager.GetManager<InputManager>().canPlay = true;
+			Manager.GetManager<LevelManager>().ClearMorseCode();
+        }
 
 		public void UpdateLetter(string pLetter, string pSecondLetter, string pThirdLetter)
 		{

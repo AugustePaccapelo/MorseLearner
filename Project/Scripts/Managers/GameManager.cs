@@ -71,16 +71,20 @@ namespace Com.IsartDigital.OBG.Managers
 			currentLight = lightScene.Instantiate<PointLight2D>();
 			gameContainer.AddChild(currentLight);
 			nodeToFollow = pNodeToFollow;
+			currentLight.Position = nodeToFollow.Position + nodeToFollow.PivotOffset;
         }
 
 		public void StopLight()
 		{
-			CpuParticles2D lParticules = particuleScene.Instantiate<CpuParticles2D>();
-			gameContainer.AddChild(lParticules);
-			lParticules.Position = nodeToFollow.Position + nodeToFollow.PivotOffset;
-			lParticules.Emitting = true;
-			lParticules.Finished += () => lParticules.QueueFree();
-			currentLight.QueueFree();
+			if (nodeToFollow != null)
+			{
+				CpuParticles2D lParticules = particuleScene.Instantiate<CpuParticles2D>();
+				gameContainer.AddChild(lParticules);
+				lParticules.Position = nodeToFollow.Position + nodeToFollow.PivotOffset;
+				lParticules.Emitting = true;
+				lParticules.Finished += () => lParticules.QueueFree();
+			}
+			currentLight?.QueueFree();
 			currentLight = null;
 			nodeToFollow = null;
 		}

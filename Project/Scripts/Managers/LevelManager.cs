@@ -97,8 +97,6 @@ namespace Com.IsartDigital.OBG.Managers
 
             string lCurrentMorseCode = MorseCode.alphabet[currentLetter];
             currentLetterMorseCode = lCurrentMorseCode;
-            
-            ClearMorseCode();
 
             hud.UpdateLetter(currentLetter, secondLetter, thirdLetter);
         }
