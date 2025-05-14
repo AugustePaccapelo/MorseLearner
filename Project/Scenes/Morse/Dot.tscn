@@ -22,6 +22,8 @@ scale = Vector2(0.07, 0.07)
 [node name="Good" type="Node2D" parent="Renderer"]
 
 [node name="Sprite2D" type="Sprite2D" parent="Renderer/Good"]
+position = Vector2(1.07141, 0)
+scale = Vector2(1.0042, 1)
 texture = ExtResource("1_w8b6r")
 
 [node name="Broken" type="Node2D" parent="Renderer"]

@@ -66,13 +66,14 @@ namespace Com.IsartDigital.OBG.Managers
                 wasPressing = false;
 			}
 		}
-
-        public override void _Input(InputEvent pEvent)
+        
+        public override void _UnhandledInput(InputEvent pEvent)
         {
-            base._Input(pEvent);
+            base._UnhandledInput(pEvent);
 
 			// Touch managment
 			if (!canPlay) return;
+			if (GetTree().Root.GuiGetFocusOwner() != null) return;
 
 			if (IsPressedEvent(pEvent) && !isPressing)
 			{

@@ -9,6 +9,22 @@
 
 [node name="Main" type="Node2D"]
 
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+
+[node name="Menus" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
 [node name="Managers" type="Node2D" parent="."]
 
 [node name="GameManager" parent="Managers" node_paths=PackedStringArray("gameContainer") instance=ExtResource("1_1k356")]
@@ -24,19 +40,5 @@ MenusContainer = NodePath("../../UI/Menus")
 
 [node name="LevelManager" parent="Managers" node_paths=PackedStringArray("gameContainer") instance=ExtResource("4_x8sv3")]
 gameContainer = NodePath("../../GameContainer")
-
-[node name="UI" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Menus" type="Control" parent="UI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="GameContainer" type="Node2D" parent="."]

@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Threading;
+using System.Threading.Tasks.Dataflow;
 using Com.IsartDigital.OBG.Managers;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
@@ -25,8 +26,10 @@ namespace Com.IsartDigital.OBG.UI
 		#endregion
 
 		// ----- Paths ----- \\
+		private const string PATH_MENU_BUTTON = "Button";
 
 		// ----- Nodes ----- \\
+		[Export] private Button mainMenuButton;
 		[Export] private Label currentLetterLabel, secondLetterLabel, thirdLetterLabel;
 		[Export] private Label confirmationLabel;
         [Export] public Control startMorseCodePos { get; private set; }
@@ -80,8 +83,12 @@ namespace Com.IsartDigital.OBG.UI
 
 			LevelManager lLevelManager = Manager.GetManager<LevelManager>();
             lLevelManager.hud = this;
-            lLevelManager.startMorseCodePos = startMorseCodePos;
+			lLevelManager.startMorseCodePos = startMorseCodePos;
 
+			if (mainMenuButton is null) mainMenuButton = GetNode<Button>(PATH_MENU_BUTTON);
+			
+			mainMenuButton.Pressed += MainMenuPressed;
+			
             currentLetterPos = currentLetterLabel.Position;
 			secondLetterPos = secondLetterLabel.Position;
 			thirdLetterPos = thirdLetterLabel.Position;
@@ -113,6 +120,12 @@ namespace Com.IsartDigital.OBG.UI
 		}
 
 		// ----- My Functions ----- \\
+
+		private void MainMenuPressed()
+		{
+            mainMenuButton.Pressed -= MainMenuPressed;
+            CustomSignals.GoToMainMenu?.Invoke();
+		}
 
 		public void NewLetterAnimation()
 		{
