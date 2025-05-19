@@ -80,6 +80,7 @@ namespace Com.IsartDigital.OBG.Managers
 
             thirdLetter = GetRandomLetter();
             secondLetter = GetRandomLetter();
+            currentMorseCode = "";
 
             NewLetter();
 		}

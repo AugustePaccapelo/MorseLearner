@@ -98,6 +98,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private void ClearGameContainer()
 		{
+			GetManager<LevelManager>().allMorseCharacters.Clear();
 			for (int i = gameContainer.GetChildCount() - 1; i > -1; i--)
 			{
 				//if (gameContainer.GetChild(i) is CpuParticles2D lPart) lPart.Emitting = false;
