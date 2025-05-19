@@ -97,10 +97,15 @@ namespace Com.IsartDigital.OBG.Managers
             secondLetter = thirdLetter;
             if (streak >= 3 && LevelSelector.numLettersKnown < MorseCode.alphabet.Count)
             {
+                GD.Print("cahnge");
                 allLetters.Add(MorseCode.alphabet.Keys.ToList()[LevelSelector.numLettersKnown]);
                 thirdLetter = allLetters.Last();
             }
-            else thirdLetter = GetRandomLetter();
+            else
+            { 
+                thirdLetter = GetRandomLetter();
+                GD.Print("else");
+            }
 
             string lCurrentMorseCode = MorseCode.alphabet[currentLetter];
             currentLetterMorseCode = lCurrentMorseCode;

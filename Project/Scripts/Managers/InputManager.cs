@@ -73,7 +73,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 			// Touch managment
 			if (!canPlay) return;
-			if (GetTree().Root.GuiGetFocusOwner() != null) return;
+			//if (GetTree().Root.GuiGetFocusOwner() != null) return;
 
 			if (IsPressedEvent(pEvent) && !isPressing)
 			{

@@ -104,6 +104,7 @@ text = "A"
 label_settings = SubResource("LabelSettings_kn5n1")
 
 [node name="Confirmation" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.307
