@@ -57,8 +57,6 @@ namespace Com.IsartDigital.OBG.Managers
             CustomSignals.InputStopHold += InputStopHold;
             CustomSignals.NewCharacter += NewCharacter;
             CustomSignals.ErrorInCode += WrongCharacter;
-
-            allLetters = MorseCode.alphabet.Keys.ToList();
         }
 
         public override void _Process(double pDelta)
@@ -72,13 +70,16 @@ namespace Com.IsartDigital.OBG.Managers
 
 		public void StartGame(int pDifficulty)
 		{
-			if (pDifficulty == 0)
-			{
-				allLetters = allLetters.Take(LevelSelector.numLettersKnown).ToList();
-			}
-            //GetRandomLetter();
+            if (pDifficulty == 0)
+            {
+                allLetters = MorseCode.alphabet.Keys.ToList().Take(LevelSelector.numLettersKnown).ToList();
+            }
+            else
+            {
+                allLetters = MorseCode.alphabet.Keys.ToList();
+            }
 
-            thirdLetter = GetRandomLetter();
+                thirdLetter = GetRandomLetter();
             secondLetter = GetRandomLetter();
             currentMorseCode = "";
 

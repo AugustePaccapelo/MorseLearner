@@ -77,7 +77,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 			}
 			else
 			{
-				CustomSignals.GoToInGame?.Invoke(pDifficulty);
+                CustomSignals.GoToInGame?.Invoke(pDifficulty);
 			}
 		}
 
