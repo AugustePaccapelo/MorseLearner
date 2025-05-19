@@ -3,6 +3,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using Com.IsartDigital.OBG.Managers;
+using Com.IsartDigital.OBG.UI.Menus;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
 
@@ -23,16 +24,18 @@ namespace Com.IsartDigital.OBG.UI
 			return instance;
 
 		}
-		#endregion
+        #endregion
 
-		// ----- Paths ----- \\
-		private const string PATH_MENU_BUTTON = "Button";
+        // ----- Paths ----- \\
+        [Export] private PackedScene dotTextureScene, dashTextureScene;
+        private const string PATH_MENU_BUTTON = "Button";
 
 		// ----- Nodes ----- \\
 		[Export] private Button mainMenuButton;
 		[Export] private Label currentLetterLabel, secondLetterLabel, thirdLetterLabel;
 		[Export] private Label confirmationLabel;
         [Export] public Control startMorseCodePos { get; private set; }
+		[Export] private Control unkownPos;
 
 		// ----- Others ----- \\
 		private string wrongMorseCodeConfirmation = "Sorry !";
@@ -59,6 +62,9 @@ namespace Com.IsartDigital.OBG.UI
 		private float thirdLetterSpawnDuration = 0.4f;
 		private Vector2 currentLetterPos, secondLetterPos, thirdLetterPos;
 		private Vector2 waitingLettersBaseScale;
+
+		private bool isAnimationRunning = false;
+		private HBoxContainer unkownCont;
 
         // ---------- FUNCTIONS ---------- \\
 
@@ -124,12 +130,66 @@ namespace Com.IsartDigital.OBG.UI
 
 		private void MainMenuPressed()
 		{
+			if (isAnimationRunning) return;
             mainMenuButton.Pressed -= MainMenuPressed;
             CustomSignals.GoToMainMenu?.Invoke();
 		}
 
-		public void NewLetterAnimation()
+		public void UnknownLetterAnim()
 		{
+			unkownCont = new HBoxContainer();
+			AddChild(unkownCont);
+            unkownCont.Position = unkownPos.Position;
+			thirdLetterLabel.Reparent(unkownCont);
+			AddMorseCode(thirdLetterLabel.Text, unkownCont);
+			Tween lTween = CreateTween();
+			lTween.TweenProperty(unkownCont, TweenProperties.POSITION, thirdLetterPos, 2f);
+			lTween.Chain().TweenProperty(thirdLetterLabel, TweenProperties.SCALE, waitingLettersBaseScale, thirdLetterSpawnDuration); 
+			lTween.Finished += () =>
+			{
+				thirdLetterLabel.Reparent(this);
+				thirdLetterLabel.Position = thirdLetterPos;
+				unkownCont.QueueFree();
+				unkownCont = null;
+
+				AnimationFinished();
+				
+			};
+			lTween.Play();
+		}
+
+        private void AddMorseCode(string pLetter, HBoxContainer pCont)
+        {
+            string lCode = MorseCode.alphabet[pLetter];
+            foreach (char lCarac in lCode)
+            {
+                switch (lCarac)
+                {
+                    case MorseCode.DOT_CHARAC:
+                        AddDot(pCont);
+                        break;
+                    case MorseCode.DASH_CHARAC:
+                        AddDash(pCont);
+                        break;
+                }
+            }
+        }
+
+        private void AddDot(Control lParent)
+        {
+            TextureRect lDot = dotTextureScene.Instantiate<TextureRect>();
+            lParent.AddChild(lDot);
+        }
+
+        private void AddDash(Control lParent)
+        {
+            TextureRect lDash = dashTextureScene.Instantiate<TextureRect>();
+            lParent.AddChild(lDash);
+        }
+
+        public void NewLetterAnimation()
+		{
+			isAnimationRunning = true;
             Manager.GetManager<GameManager>().StopLight();
             currentLetterLabel.Text = "";
 
@@ -154,7 +214,9 @@ namespace Com.IsartDigital.OBG.UI
 
 		public void LetterFinishedAnimation()
 		{
-			Manager.GetManager<GameManager>().StartLight(currentLetterLabel);
+			isAnimationRunning = true;
+
+            Manager.GetManager<GameManager>().StartLight(currentLetterLabel);
 
 			Tween lTween = CreateTween();
 
@@ -174,6 +236,7 @@ namespace Com.IsartDigital.OBG.UI
 
 		private void StartTurnAnimation()
 		{
+			isAnimationRunning = true;
             isLetterTurning = true;
 			animFinishCurrentXMult = 0;
             animElapseTime = 0;
@@ -183,6 +246,8 @@ namespace Com.IsartDigital.OBG.UI
 		
 		private void UpdateLetters()
 		{
+			isAnimationRunning = true;
+
             Manager.GetManager<LevelManager>().NewLetter();
 
             currentLetterLabel.Position = currentLetterPos;
@@ -193,18 +258,28 @@ namespace Com.IsartDigital.OBG.UI
 			currentLetterLabel.Scale = Vector2.One;
 			secondLetterLabel.Scale = waitingLettersBaseScale;
 
-			Tween lTween = CreateTween();
+			if (LevelManager.streak >= 3)
+			{
+                LevelSelector.numLettersKnown++;
+				LevelManager.streak = 0;
+				UnknownLetterAnim();
+            }
+			else
+			{
+				Tween lTween = CreateTween();
 
-			lTween.TweenProperty(thirdLetterLabel, TweenProperties.SCALE, waitingLettersBaseScale, thirdLetterSpawnDuration)
-				.SetTrans(Tween.TransitionType.Elastic).SetEase(Tween.EaseType.Out);
+				lTween.TweenProperty(thirdLetterLabel, TweenProperties.SCALE, waitingLettersBaseScale, thirdLetterSpawnDuration)
+					.SetTrans(Tween.TransitionType.Elastic).SetEase(Tween.EaseType.Out);
 
-			lTween.Finished += AnimationFinished;
+				lTween.Finished += AnimationFinished;
 
-			lTween.Play();
+				lTween.Play();
+			}
 		}
 
 		private void AnimationFinished()
 		{
+			isAnimationRunning = false;
             Manager.GetManager<InputManager>().canPlay = true;
 			Manager.GetManager<LevelManager>().ClearMorseCode();
         }

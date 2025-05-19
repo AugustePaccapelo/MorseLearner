@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Com.IsartDigital.OBG.Managers;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
 
@@ -25,7 +26,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		// ----- Paths ----- \\
 		[Export] private PackedScene dotTextureScene, dashTextureScene;
-		[Export] private CpuParticles2D particules;
+		[Export] private PackedScene particulesScene;
 		private const string PATH_LABEL = "Letter";
 
 		// ----- Nodes ----- \\
@@ -33,6 +34,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
 		[Export] private VBoxContainer vBoxCont;
 		[Export] private TextureRect handDot, handDash;
 		private List<HBoxContainer> allHBoxContainers = new List<HBoxContainer>();
+		private CpuParticles2D dotParticules, dashParticules;
 
 		// ----- Others ----- \\
 		public int numLettersKnown = 1;
@@ -41,20 +43,34 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		private float dotPressTime;
 		private float dashPressTime;
-		private float handAnimationDuration = 1f;
+		private float handAnimationDuration = 0.5f;
 		private float startRotation;
 		private float addedRotation = 60f;
-		private float waitTimeToLoop = 1.5f;
+		private float rotationSpeed;
+		private float waitTimeToLoop = 1f;
 
 		private bool isDoingDot;
 		private bool isDoingDash;
 		private float elapseTime;
+		private bool isDotPressing;
+		private bool isDashPressing;
+		private bool isDotGoingBack;
+        private bool isDashGoingBack;
 
-		// ---------- FUNCTIONS ---------- \\
+        private enum HandState { Idle, Rotating, Emitting, Returning }
 
-		// ----- Constructor & Ready & Process ----- \\
+        private HandState dotState = HandState.Idle;
+        private HandState dashState = HandState.Idle;
 
-		private HelpScreen() : base() { }
+        private float dotAnimTimer = 0;
+        private float dashAnimTimer = 0;
+
+
+        // ---------- FUNCTIONS ---------- \\
+
+        // ----- Constructor & Ready & Process ----- \\
+
+        private HelpScreen() : base() { }
 
 		public override void _Ready()
 		{
@@ -88,18 +104,162 @@ namespace Com.IsartDigital.OBG.UI.Menus
 				lLab.Text = lettersToShow[i];
 				AddMorseCode(lettersToShow[i], lHCont);
 			}
+
+			dotPressTime = InputManager.unitTime * InputManager.DOT_UNIT + InputManager.timeErrorMargin;
+			dashPressTime = InputManager.unitTime * InputManager.DASH_UNIT + InputManager.timeErrorMargin;
+            dashPressTime *= 1.5f;
+            startRotation = handDot.Rotation;
+			rotationSpeed = Mathf.DegToRad(addedRotation) / handAnimationDuration;
 		}
 
-		public override void _Process(double pDelta)
-		{
-			float lDelta = (float)pDelta;
+        public override void _Process(double pDelta)
+        {
+            float delta = (float)pDelta;
+            base._Process(pDelta);
 
-			base._Process(lDelta);
-		}
+            // Start new loop only if both are Idle
+            if (dotState == HandState.Idle && dashState == HandState.Idle)
+            {
+                elapseTime += delta;
 
-		// ----- My Functions ----- \\
+                if (elapseTime >= waitTimeToLoop)
+                {
+                    elapseTime = 0;
+                    StartDot();
+                    StartDash();
+                }
+            }
 
-		private void PlayButtonPressed()
+            UpdateDot(delta);
+            UpdateDash(delta);
+        }
+
+
+        // ----- My Functions ----- \\
+
+        private void StartDot()
+        {
+            dotState = HandState.Rotating;
+            dotAnimTimer = 0;
+
+            if (dotParticules is null)
+                dotParticules = particulesScene.Instantiate<CpuParticles2D>();
+
+            dotParticules.OneShot = false;
+            dotParticules.Emitting = false;
+            dotParticules.Amount = 20;
+            dotParticules.Explosiveness = 0;
+        }
+
+        private void StartDash()
+        {
+            dashState = HandState.Rotating;
+            dashAnimTimer = 0;
+
+            if (dashParticules is null)
+                dashParticules = particulesScene.Instantiate<CpuParticles2D>();
+
+            dashParticules.OneShot = false;
+            dashParticules.Emitting = false;
+            dashParticules.Amount = 20;
+            dashParticules.Explosiveness = 0;
+        }
+
+        private void UpdateDot(float delta)
+        {
+            switch (dotState)
+            {
+                case HandState.Rotating:
+                    handDot.Rotation += rotationSpeed * delta;
+                    dotAnimTimer += delta;
+
+                    if (dotAnimTimer >= handAnimationDuration)
+                    {
+                        handDot.Rotation = startRotation + Mathf.DegToRad(addedRotation);
+                        dotParticules.Emitting = true;
+                        dotState = HandState.Emitting;
+                        Manager.GetManager<GameManager>().gameContainer.AddChild(dotParticules);
+                        dotParticules.Position = handDot.GetChild<Control>(0).GlobalPosition;
+                        dotAnimTimer = 0;
+                    }
+                    break;
+
+                case HandState.Emitting:
+                    dotAnimTimer += delta;
+
+                    if (dotAnimTimer >= dotPressTime)
+                    {
+                        dotParticules.Emitting = false;
+                        dotParticules.QueueFree();
+                        dotParticules = null;
+
+                        dotState = HandState.Returning;
+                        dotAnimTimer = 0;
+                    }
+                    break;
+
+                case HandState.Returning:
+                    handDot.Rotation -= rotationSpeed * delta;
+                    dotAnimTimer += delta;
+
+                    if (dotAnimTimer >= handAnimationDuration)
+                    {
+                        handDot.Rotation = startRotation;
+                        dotState = HandState.Idle;
+                        dotAnimTimer = 0;
+                    }
+                    break;
+            }
+        }
+
+        private void UpdateDash(float delta)
+        {
+            switch (dashState)
+            {
+                case HandState.Rotating:
+                    handDash.Rotation += rotationSpeed * delta;
+                    dashAnimTimer += delta;
+
+                    if (dashAnimTimer >= handAnimationDuration)
+                    {
+                        handDash.Rotation = startRotation + Mathf.DegToRad(addedRotation);
+                        dashParticules.Emitting = true;
+                        dashState = HandState.Emitting;
+                        Manager.GetManager<GameManager>().gameContainer.AddChild(dashParticules);
+                        dashParticules.Position = handDash.GetChild<Control>(0).GlobalPosition;
+                        dashAnimTimer = 0;
+                    }
+                    break;
+
+                case HandState.Emitting:
+                    dashAnimTimer += delta;
+
+                    if (dashAnimTimer >= dashPressTime)
+                    {
+                        dashParticules.Emitting = false;
+                        dashParticules.QueueFree();
+                        dashParticules = null;
+
+                        dashState = HandState.Returning;
+                        dashAnimTimer = 0;
+                    }
+                    break;
+
+                case HandState.Returning:
+                    handDash.Rotation -= rotationSpeed * delta;
+                    dashAnimTimer += delta;
+
+                    if (dashAnimTimer >= handAnimationDuration)
+                    {
+                        handDash.Rotation = startRotation;
+                        dashState = HandState.Idle;
+                        dashAnimTimer = 0;
+                    }
+                    break;
+            }
+        }
+
+        private void PlayButtonPressed()
 		{
 			CustomSignals.GoToInGame?.Invoke(0);
 		}

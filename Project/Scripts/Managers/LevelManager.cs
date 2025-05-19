@@ -27,7 +27,7 @@ namespace Com.IsartDigital.OBG.Managers
 
         private RandomNumberGenerator rand = new RandomNumberGenerator();
 
-		private string[] allLetters;
+		private List<string> allLetters = new List<string>();
 
 		public string currentLetter { get; private set; }
         public string secondLetter { get; private set; }
@@ -40,6 +40,8 @@ namespace Com.IsartDigital.OBG.Managers
         public List<MorseCharacter> allMorseCharacters = new List<MorseCharacter>();
         [Export] private float morseHeight = 40f;
         [Export] private float separation = 10f;
+
+        public static int streak = 0;
 
         // ---------- FUNCTIONS ---------- \\
 
@@ -55,7 +57,7 @@ namespace Com.IsartDigital.OBG.Managers
             CustomSignals.NewCharacter += NewCharacter;
             CustomSignals.ErrorInCode += WrongCharacter;
 
-            allLetters = MorseCode.alphabet.Keys.ToArray();
+            allLetters = MorseCode.alphabet.Keys.ToList();
         }
 
         public override void _Process(double pDelta)
@@ -71,7 +73,7 @@ namespace Com.IsartDigital.OBG.Managers
 		{
 			if (pDifficulty == 0)
 			{
-				allLetters = allLetters.Take(LevelSelector.numLettersKnown).ToArray();
+				allLetters = allLetters.Take(LevelSelector.numLettersKnown).ToList();
 			}
             //GetRandomLetter();
 
@@ -83,7 +85,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 		private string GetRandomLetter()
 		{
-			int lLength = allLetters.Length;
+			int lLength = allLetters.Count;
 			int lIndex = rand.RandiRange(0, lLength - 1);
             
             return allLetters[lIndex];
@@ -93,7 +95,12 @@ namespace Com.IsartDigital.OBG.Managers
         {
             currentLetter = secondLetter;
             secondLetter = thirdLetter;
-            thirdLetter = GetRandomLetter();
+            if (streak >= 3 && LevelSelector.numLettersKnown < MorseCode.alphabet.Count)
+            {
+                allLetters.Add(MorseCode.alphabet.Keys.ToList()[LevelSelector.numLettersKnown]);
+                thirdLetter = allLetters.Last();
+            }
+            else thirdLetter = GetRandomLetter();
 
             string lCurrentMorseCode = MorseCode.alphabet[currentLetter];
             currentLetterMorseCode = lCurrentMorseCode;
@@ -113,12 +120,14 @@ namespace Com.IsartDigital.OBG.Managers
                 pCharac.GoodAnimation();
 				if (IsCodeFinished())
 				{
+                    if (currentLetter == allLetters.Last()) streak++;
                     HUD.GetInstance().LetterFinishedAnimation();
                     GetManager<InputManager>().canPlay = false;
 				}
 			}
 			else
 			{
+                streak = 0;
 				isCurrentlyWrong = true;
                 foreach (MorseCharacter lCharac in allMorseCharacters)
                 {

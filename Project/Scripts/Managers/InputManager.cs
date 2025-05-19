@@ -21,10 +21,10 @@ namespace Com.IsartDigital.OBG.Managers
 		private float currentPressedTime;
 		private bool isHolding = false;
 
-        private float unitTime = 0.1f;
-        private const int DOT_UNIT = 1;
-        private const int DASH_UNIT = 3;
-        private float timeErrorMargin = 0.1f;
+        public static float unitTime = 0.1f;
+        public const int DOT_UNIT = 1;
+        public const int DASH_UNIT = 3;
+        public static float timeErrorMargin = 0.1f;
 
         // ---------- FUNCTIONS ---------- \\
 

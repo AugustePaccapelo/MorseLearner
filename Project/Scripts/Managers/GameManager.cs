@@ -15,7 +15,7 @@ namespace Com.IsartDigital.OBG.Managers
 		[Export] private PackedScene particuleScene;
 
 		// ----- Nodes ----- \\
-		[Export] private Node2D gameContainer;
+		[Export] public Node2D gameContainer { get; private set; }
 		private InputManager inputManager;
 		public PointLight2D currentLight;
 		private Control nodeToFollow;
@@ -34,6 +34,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 			allManagersFinishedInits += GetAllManagers;
 			CustomSignals.GoToMainMenu += GoToMainMenu;
+			CustomSignals.GoToInGame += (_) => ClearGameContainer();
         }
 
         public override void _Process(double pDelta)
@@ -99,6 +100,7 @@ namespace Com.IsartDigital.OBG.Managers
 		{
 			for (int i = gameContainer.GetChildCount() - 1; i > -1; i--)
 			{
+				//if (gameContainer.GetChild(i) is CpuParticles2D lPart) lPart.Emitting = false;
 				gameContainer.GetChild(i).QueueFree();
 			}
 		}

@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://f4yxolbl45o3"]
+[gd_scene load_steps=8 format=3 uid="uid://f4yxolbl45o3"]
 
 [ext_resource type="Script" path="res://Scripts/UI/HUD.cs" id="1_pa478"]
+[ext_resource type="PackedScene" uid="uid://bxm0f60b5hai3" path="res://Scenes/Morse/DotTextureRect.tscn" id="2_cwnrp"]
 [ext_resource type="Texture2D" uid="uid://dq1h6jmssjh6w" path="res://Assets/Textures/UI/HUD/InGameHUD.png" id="2_ha3e6"]
+[ext_resource type="PackedScene" uid="uid://cglhvdgwym2pj" path="res://Scenes/Morse/DashTextureRect.tscn" id="3_tmuf1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bcigg"]
 font_size = 128
@@ -12,7 +14,7 @@ font_size = 128
 [sub_resource type="LabelSettings" id="LabelSettings_cxe07"]
 font_size = 32
 
-[node name="HUD" type="Control" node_paths=PackedStringArray("currentLetterLabel", "secondLetterLabel", "thirdLetterLabel", "confirmationLabel", "startMorseCodePos", "letterFinishAnimPos")]
+[node name="HUD" type="Control" node_paths=PackedStringArray("mainMenuButton", "currentLetterLabel", "secondLetterLabel", "thirdLetterLabel", "confirmationLabel", "startMorseCodePos", "unkownPos", "letterFinishAnimPos")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,11 +23,15 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_pa478")
+dotTextureScene = ExtResource("2_cwnrp")
+dashTextureScene = ExtResource("3_tmuf1")
+mainMenuButton = NodePath("Button")
 currentLetterLabel = NodePath("CurrentLetter")
 secondLetterLabel = NodePath("SecondLetter")
 thirdLetterLabel = NodePath("ThirdLetter")
 confirmationLabel = NodePath("Confirmation")
 startMorseCodePos = NodePath("StartMorseCodePos")
+unkownPos = NodePath("UnkownPos")
 letterFinishAnimPos = NodePath("LetterFinishAnimPos")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -148,3 +154,14 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 32
 action_mode = 0
 text = "Menu"
+
+[node name="UnkownPos" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.077
+anchor_top = -0.054
+anchor_right = 0.077
+anchor_bottom = -0.054
+offset_left = -0.0410042
+offset_top = 0.0620003
+offset_right = 39.959
+offset_bottom = 40.062
