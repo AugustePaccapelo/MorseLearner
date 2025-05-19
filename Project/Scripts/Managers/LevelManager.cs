@@ -42,6 +42,7 @@ namespace Com.IsartDigital.OBG.Managers
         [Export] private float separation = 10f;
 
         public static int streak = 0;
+        public bool letterFinished = false;
 
         // ---------- FUNCTIONS ---------- \\
 
@@ -97,14 +98,12 @@ namespace Com.IsartDigital.OBG.Managers
             secondLetter = thirdLetter;
             if (streak >= 3 && LevelSelector.numLettersKnown < MorseCode.alphabet.Count)
             {
-                GD.Print("cahnge");
                 allLetters.Add(MorseCode.alphabet.Keys.ToList()[LevelSelector.numLettersKnown]);
                 thirdLetter = allLetters.Last();
             }
             else
             { 
                 thirdLetter = GetRandomLetter();
-                GD.Print("else");
             }
 
             string lCurrentMorseCode = MorseCode.alphabet[currentLetter];
@@ -123,8 +122,9 @@ namespace Com.IsartDigital.OBG.Managers
                     hud.UpdateConfirmation(false);
                 }
                 pCharac.GoodAnimation();
-				if (IsCodeFinished())
+				if (!letterFinished && IsCodeFinished())
 				{
+                    letterFinished = true;
                     if (currentLetter == allLetters.Last()) streak++;
                     HUD.GetInstance().LetterFinishedAnimation();
                     GetManager<InputManager>().canPlay = false;

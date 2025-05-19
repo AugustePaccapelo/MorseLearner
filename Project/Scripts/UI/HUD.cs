@@ -278,13 +278,14 @@ namespace Com.IsartDigital.OBG.UI
 			isAnimationRunning = false;
             Manager.GetManager<InputManager>().canPlay = true;
 			Manager.GetManager<LevelManager>().ClearMorseCode();
+			Manager.GetManager<LevelManager>().letterFinished = false;
         }
 
 		public void UpdateLetter(string pLetter, string pSecondLetter, string pThirdLetter)
 		{
 			currentLetterLabel.Text = pLetter;
 			secondLetterLabel.Text = pSecondLetter;
-			thirdLetterLabel.Text = pThirdLetter;
+            thirdLetterLabel.Text = pThirdLetter;
         }
 
 		public void UpdateConfirmation(bool pIsWrong)

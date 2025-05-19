@@ -24,7 +24,7 @@ namespace Com.IsartDigital.OBG.Managers
         public static float unitTime = 0.1f;
         public const int DOT_UNIT = 1;
         public const int DASH_UNIT = 3;
-        public static float timeErrorMargin = 0.1f;
+        public static float timeErrorMargin = 0.15f;
 
         // ---------- FUNCTIONS ---------- \\
 
