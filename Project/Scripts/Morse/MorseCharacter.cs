@@ -12,6 +12,7 @@ namespace Com.IsartDigital.OBG.Morse
 
 		// ----- Paths ----- \\
 		[Export] protected PackedScene particuleScene;
+		[Export] protected PackedScene brokenParticuleScene;
 
         // ----- Nodes ----- \\
         [Export] public Sprite2D defaultSprite { get; private set; }

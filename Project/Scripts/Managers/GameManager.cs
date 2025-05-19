@@ -9,7 +9,7 @@ namespace Com.IsartDigital.OBG.Managers
 	public partial class GameManager : Manager
 	{
 		// ---------- VARIABLES ---------- \\
-
+		
 		// ----- Paths ----- \\
 		[Export] private PackedScene lightScene;
 		[Export] private PackedScene particuleScene;
@@ -28,11 +28,11 @@ namespace Com.IsartDigital.OBG.Managers
 
         // ----- Constructor & Ready & Process ----- \\
 
-        public override void Init()
+        protected override void Init()
         {
             screenSize = GetViewportRect().Size;
 
-			allManagersFinished += GetAllManagers;
+			allManagersFinishedInits += GetAllManagers;
 			CustomSignals.GoToMainMenu += GoToMainMenu;
         }
 

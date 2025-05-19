@@ -13,7 +13,9 @@ namespace Com.IsartDigital.OBG.Managers
 		// ----- Managers ----- \\
 		public static int numManager { get; private set; } = 0;
 		private static Dictionary<Type, Manager> allManagers = new Dictionary<Type, Manager>();
-		protected static Action allManagersFinished;
+		public static Action allManagersFinishedInits;
+		public static bool isInitsFinished { get; private set; } = false;
+		public Type thisType { get; private set; } = null;
 
 		// ---------- FUNCTIONS ---------- \\
 
@@ -25,24 +27,25 @@ namespace Com.IsartDigital.OBG.Managers
 			numManager++;
 		}
 
-		public override void _Ready()
+		public override sealed void _Ready()
 		{
             base._Ready();
-            Type lType = GetType();
-
+            thisType = GetType();
+			
 			// Prevent duplicate manager of the same type
-			if (allManagers.ContainsKey(lType))
+			if (allManagers.ContainsKey(thisType))
 			{
-				GD.Print("This manager : ", lType, " already exist, destroying last added.");
-				QueueFree();
+				GD.Print("This manager : ", thisType, " already exist, destroying last added.");
+                numManager--;
+                QueueFree();
 				return;
 			}
-
-			allManagers.Add(lType, this);
+			
+			allManagers.Add(thisType, this);
 			if (IsAllManagersReady()) InitAllManagers();
 		}
 
-		public abstract void Init();
+		protected abstract void Init();
 
 		// ----- My Functions ----- \\
 
@@ -64,17 +67,26 @@ namespace Com.IsartDigital.OBG.Managers
 		private bool IsAllManagersReady() => numManager == allManagers.Count;
 		private void InitAllManagers()
 		{
-			foreach (Manager lManager in allManagers.Values) lManager.Init();
-			allManagersFinished?.Invoke();
+			if (!isInitsFinished)
+			{
+				foreach (Manager lManager in allManagers.Values) lManager.Init();
+				isInitsFinished = true;
+				allManagersFinishedInits?.Invoke();
+				return;
+			}
+			Init();
 		}
 
-		// ----- Destructor ----- \\
+        // ----- Destructor ----- \\
 
-		protected override void Dispose(bool pDisposing)
+        protected override void Dispose(bool pDisposing)
 		{
-			numManager--;
-			allManagers.Remove(GetType());
-			base.Dispose(pDisposing);
-		}
+            if (allManagers[thisType] == this)
+			{
+                numManager--;
+				allManagers.Remove(thisType);
+			}
+            base.Dispose(pDisposing);
+        }
 	}
 }

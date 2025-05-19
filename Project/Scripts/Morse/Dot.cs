@@ -76,6 +76,10 @@ namespace Com.IsartDigital.OBG.Morse
 			lTween.TweenProperty(leftBroken, TweenProperties.ROTATION, -lAngle, brokenStartAnimDuration);
             lTween.Parallel().TweenProperty(rightBroken, TweenProperties.ROTATION, lAngle, brokenStartAnimDuration);
 			lTween.Chain().TweenInterval(waitTimeForBrokenAnim);
+            CpuParticles2D lParticule = brokenParticuleScene.Instantiate<CpuParticles2D>();
+            AddChild(lParticule);
+            lParticule.Scale *= 0.5f;
+            lParticule.Emitting = true;
             lTween.Finished += () => CustomSignals.ErrorInCode?.Invoke();
         }
 

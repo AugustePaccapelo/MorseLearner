@@ -21,6 +21,16 @@ namespace Com.IsartDigital.OBG.Morse
         private Vector2 endScale = new Vector2(1.5f, 1.5f);
         private float spawnDuration = 0.3f;
 
+        private float goodAnimDuration = 0.15f;
+        private float brokenStartAnimDuration = 0.25f;
+
+        private float waitTimeForBrokenAnim = 0.25f;
+        private float borkenAnimDuration = 0.5f;
+        private float fadeDuration = 0.75f;
+        private float borkenWaitTime = 0.15f;
+
+        private float brokenStartRotation = 45f;
+
         // ---------- FUNCTIONS ---------- \\
 
         // ----- Constructor & Ready & Process ----- \\
@@ -58,7 +68,16 @@ namespace Com.IsartDigital.OBG.Morse
 
         public override void BrokenAnimation()
         {
-            GetTree().CreateTimer(0.2).Timeout += () => CustomSignals.ErrorInCode?.Invoke();
+            Tween lTween = CreateTween();
+            float lAngle = Mathf.DegToRad(brokenStartRotation);
+            lTween.TweenProperty(leftBroken, TweenProperties.ROTATION, -lAngle, brokenStartAnimDuration);
+            lTween.Parallel().TweenProperty(rightBroken, TweenProperties.ROTATION, lAngle, brokenStartAnimDuration);
+            lTween.Chain().TweenInterval(waitTimeForBrokenAnim);
+            CpuParticles2D lParticule = brokenParticuleScene.Instantiate<CpuParticles2D>();
+            AddChild(lParticule);
+            lParticule.Scale *= 0.5f;
+            lParticule.Emitting = true;
+            lTween.Finished += () => CustomSignals.ErrorInCode?.Invoke();
         }
 
         // ----- Destructor ----- \\

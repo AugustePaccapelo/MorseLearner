@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Com.IsartDigital.OBG.Managers;
+using System.Runtime.CompilerServices;
 using Com.IsartDigital.OBG.Utils;
 using Godot;
 
@@ -25,17 +25,30 @@ namespace Com.IsartDigital.OBG.UI.Menus
 
 		// ----- Paths ----- \\
 		[Export] private PackedScene dotTextureScene, dashTextureScene;
+		[Export] private CpuParticles2D particules;
 		private const string PATH_LABEL = "Letter";
 
 		// ----- Nodes ----- \\
 		[Export] private Button playButton;
 		[Export] private VBoxContainer vBoxCont;
+		[Export] private TextureRect handDot, handDash;
 		private List<HBoxContainer> allHBoxContainers = new List<HBoxContainer>();
 
 		// ----- Others ----- \\
-		public int numLettersKnown = 3;
+		public int numLettersKnown = 1;
 		public int numLetterToShow;
 		private List<string> lettersToShow;
+
+		private float dotPressTime;
+		private float dashPressTime;
+		private float handAnimationDuration = 1f;
+		private float startRotation;
+		private float addedRotation = 60f;
+		private float waitTimeToLoop = 1.5f;
+
+		private bool isDoingDot;
+		private bool isDoingDash;
+		private float elapseTime;
 
 		// ---------- FUNCTIONS ---------- \\
 

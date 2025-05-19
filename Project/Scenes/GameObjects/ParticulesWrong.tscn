@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkrhrlw5grde7"]
+[gd_scene load_steps=2 format=3 uid="uid://c735myokbjlug"]
 
-[ext_resource type="Texture2D" uid="uid://bsg3povhiv2r8" path="res://Assets/Textures/GameObjects/ParticulesGood.png" id="1_ai0th"]
+[ext_resource type="Texture2D" uid="uid://2u6ukn01a73d" path="res://Assets/Textures/GameObjects/ParticuleWrong.png" id="1_r82wu"]
 
 [node name="CPUParticles2D" type="CPUParticles2D"]
 emitting = false
@@ -9,7 +9,7 @@ lifetime = 0.4
 one_shot = true
 explosiveness = 1.0
 lifetime_randomness = 0.1
-texture = ExtResource("1_ai0th")
+texture = ExtResource("1_r82wu")
 particle_flag_align_y = true
 spread = 180.0
 gravity = Vector2(0, 0)

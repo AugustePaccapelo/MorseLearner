@@ -28,7 +28,7 @@ namespace Com.IsartDigital.OBG.UI.Menus
         [Export] private Button learningButton, easyButton, normalButton, hardButton, hardcoreButton;
 
 		// ----- Others ----- \\
-		public static int numLettersKnown = 3;
+		public static int numLettersKnown = 1;
 
 		// ---------- FUNCTIONS ---------- \\
 

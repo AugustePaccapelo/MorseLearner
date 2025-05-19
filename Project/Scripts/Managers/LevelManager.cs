@@ -45,7 +45,7 @@ namespace Com.IsartDigital.OBG.Managers
 
         // ----- Init & Process ----- \\
 
-        public override void Init()
+        protected override void Init()
         {
             rand.Randomize();
 

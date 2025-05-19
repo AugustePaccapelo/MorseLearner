@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://bvsyjpf5lqv5h"]
+[gd_scene load_steps=7 format=3 uid="uid://bvsyjpf5lqv5h"]
 
 [ext_resource type="Script" path="res://Scripts/Morse/Dot.cs" id="1_htr5k"]
 [ext_resource type="Texture2D" uid="uid://cii5pdbtdrtum" path="res://Assets/Textures/Morse/GoodDot.png" id="1_w8b6r"]
 [ext_resource type="Texture2D" uid="uid://cai57eh0ybtps" path="res://Assets/Textures/Morse/BrokenDotLeft.png" id="2_0hevh"]
 [ext_resource type="PackedScene" uid="uid://dkrhrlw5grde7" path="res://Scenes/GameObjects/MorseParticule.tscn" id="2_c1pld"]
 [ext_resource type="Texture2D" uid="uid://s1tlq8ulaoix" path="res://Assets/Textures/Morse/BrokenDotRight.png" id="3_16o6t"]
+[ext_resource type="PackedScene" uid="uid://c735myokbjlug" path="res://Scenes/GameObjects/ParticulesWrong.tscn" id="3_xhq73"]
 
 [node name="Dot" type="Node2D" node_paths=PackedStringArray("defaultSprite", "renderer", "goodVisual", "brokenVisual", "leftBroken", "rightBroken")]
 script = ExtResource("1_htr5k")
 particuleScene = ExtResource("2_c1pld")
+brokenParticuleScene = ExtResource("3_xhq73")
 defaultSprite = NodePath("Renderer/Good/Sprite2D")
 renderer = NodePath("Renderer")
 goodVisual = NodePath("Renderer/Good")

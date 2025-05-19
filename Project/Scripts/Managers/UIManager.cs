@@ -2,6 +2,7 @@ using Com.IsartDigital.OBG.UI.Menus;
 using Com.IsartDigital.OBG.UI;
 using Godot;
 using Com.IsartDigital.OBG.Utils;
+using System;
 
 // Author : Auguste Paccapelo
 
@@ -28,7 +29,7 @@ namespace Com.IsartDigital.OBG.Managers
 
 		// ----- Init & Process ----- \\
 
-        public override void Init()
+        protected override void Init()
         {
             screenSize = GetViewportRect().Size;
 			uiContainer.Size = screenSize;

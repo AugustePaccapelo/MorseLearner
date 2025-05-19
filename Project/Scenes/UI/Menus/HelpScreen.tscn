@@ -1,19 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxmelcxyghkh3"]
+[gd_scene load_steps=6 format=3 uid="uid://bxmelcxyghkh3"]
 
 [ext_resource type="Script" path="res://Scripts/UI/Menus/HelpScreen.cs" id="1_3aovp"]
 [ext_resource type="PackedScene" uid="uid://bxm0f60b5hai3" path="res://Scenes/Morse/DotTextureRect.tscn" id="1_w58mc"]
 [ext_resource type="PackedScene" uid="uid://cglhvdgwym2pj" path="res://Scenes/Morse/DashTextureRect.tscn" id="2_h5de5"]
+[ext_resource type="Texture2D" uid="uid://pdvhvxd1b2gg" path="res://Assets/Textures/GameObjects/Hand.png" id="4_kpox6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hl1d8"]
-font_size = 64
+font_size = 128
 
-[sub_resource type="LabelSettings" id="LabelSettings_riorw"]
-font_size = 64
-
-[sub_resource type="LabelSettings" id="LabelSettings_heipi"]
-font_size = 64
-
-[node name="HelpScreen" type="Control" node_paths=PackedStringArray("playButton", "vBoxCont")]
+[node name="HelpScreen" type="Control" node_paths=PackedStringArray("playButton", "vBoxCont", "handDot", "handDash")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,6 +20,8 @@ dotTextureScene = ExtResource("1_w58mc")
 dashTextureScene = ExtResource("2_h5de5")
 playButton = NodePath("ConfimrationButton")
 vBoxCont = NodePath("VBoxContainer")
+handDot = NodePath("HandDot")
+handDash = NodePath("HandDash")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -41,14 +38,14 @@ color = Color(0.395086, 0.398054, 0.393631, 1)
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.257
-anchor_top = 0.172
-anchor_right = 0.739
-anchor_bottom = 0.604
-offset_left = 0.220001
-offset_top = -0.12001
-offset_right = -0.0599976
-offset_bottom = 0.159973
+anchor_left = 0.236
+anchor_top = 0.118
+anchor_right = 0.717
+anchor_bottom = 0.55
+offset_left = 0.21199
+offset_top = -0.654007
+offset_right = 0.465027
+offset_bottom = -0.374084
 theme_override_constants/separation = 50
 
 [node name="FirstCharacter" type="HBoxContainer" parent="VBoxContainer"]
@@ -60,23 +57,63 @@ layout_mode = 2
 text = "A"
 label_settings = SubResource("LabelSettings_hl1d8")
 
-[node name="SecondCharacter" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
+[node name="HandDot" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.236
+anchor_top = 0.301
+anchor_right = 0.398
+anchor_bottom = 0.479
+offset_left = 0.21199
+offset_top = 0.246979
+offset_right = -0.0540314
+offset_bottom = 0.412964
+pivot_offset = Vector2(43, 100)
+texture = ExtResource("4_kpox6")
+expand_mode = 3
+stretch_mode = 4
 
-[node name="Letter" type="Label" parent="VBoxContainer/SecondCharacter"]
-layout_mode = 2
-text = "B"
-label_settings = SubResource("LabelSettings_riorw")
+[node name="HandDash" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.236
+anchor_top = 0.521
+anchor_right = 0.398
+anchor_bottom = 0.699
+offset_left = 0.21199
+offset_top = -0.413025
+offset_right = -0.0540314
+offset_bottom = -0.24707
+pivot_offset = Vector2(43, 100)
+texture = ExtResource("4_kpox6")
+expand_mode = 3
+stretch_mode = 4
 
-[node name="ThirdCharacter" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
+[node name="DotTextureRect" parent="." instance=ExtResource("1_w58mc")]
+layout_mode = 1
+anchor_left = 0.606
+anchor_top = 0.39
+anchor_right = 0.699
+anchor_bottom = 0.442
+offset_left = 0.00198364
+offset_top = 0.329987
+offset_right = 49.138
+offset_bottom = 44.846
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(0.5, 0.5)
 
-[node name="Letter" type="Label" parent="VBoxContainer/ThirdCharacter"]
-layout_mode = 2
-text = "C"
-label_settings = SubResource("LabelSettings_heipi")
+[node name="DashTextureRect" parent="." instance=ExtResource("2_h5de5")]
+layout_mode = 1
+anchor_left = 0.57
+anchor_top = 0.604
+anchor_right = 0.756
+anchor_bottom = 0.656
+offset_left = 0.189972
+offset_top = -0.212036
+offset_right = 98.462
+offset_bottom = 44.3041
+scale = Vector2(0.5, 0.5)
 
 [node name="ConfimrationButton" type="Button" parent="."]
 layout_mode = 1
